@@ -1,16 +1,32 @@
 import { schema } from '@ioc:Adonis/Core/Validator'
-/**
- * Skema validasi untuk menyimpan produk
- */
-export const saveSchema = schema.create({
-  name: schema.string(),
-  description: schema.string(),
-  price: schema.number(),
-  image: schema.file.nullableAndOptional(),
-  pax: schema.number.nullableAndOptional(),
-  resellerPrice: schema.number(),
+
+const required = (trans: string) => `${trans} wajib di isi`
+
+export const messages = () => ({
+  'file.size': 'ukuran foto tidak dapat lebih dari 2MB',
+  'image.required': 'Silahkan pilih foto produk',
+  'name.required': required('nama'),
+  'description.required': required('deskripsi'),
+  'category.required': required('Kategori'),
+  'price.required': required('Harga eceran'),
+  'reseller_price.required': required('Harga grosir'),
+  'pax.required': required('Quantitas pembelian wajib disi'),
 })
-/**
- * Skema validasi untuk mengubah produk
- */
-export const updateSchema = schema.create({})
+
+export function productSchema(isUpdate: boolean) {
+  return schema.create({
+    name: schema.string(),
+    category: schema.string(),
+    description: schema.string(),
+    price: schema.number(),
+    reseller_price: schema.number(),
+    pax: schema.number(),
+    image: isUpdate
+      ? schema.file.optional({
+          size: '2mb',
+        })
+      : schema.file({
+          size: '2mb',
+        }),
+  })
+}

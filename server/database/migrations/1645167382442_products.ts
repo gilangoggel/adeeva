@@ -5,7 +5,7 @@ export default class Products extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').unsigned()
       table.string('name')
       table.string('image').nullable()
       table.string('category')
@@ -17,8 +17,7 @@ export default class Products extends BaseSchema {
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
       table.timestamp('deleted_at').nullable()
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamps(true,true);
     })
   }
 

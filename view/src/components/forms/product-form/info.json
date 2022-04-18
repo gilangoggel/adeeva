@@ -1,0 +1,11 @@
+{
+  "pricing": [
+    "Harga yang di tampilkan pada halaman pembelian reseller adalah Harga grosir per item X Quantitas pembelian.",
+    "Harga eceran adalah harga yang di tampilkan ke pengguna / customer.",
+    "Harga grosir harus lebih rendah dari harga eceran."
+  ],
+  "photo": [
+    "Pastikan foto yang di pilih tidak lebih dari 2mb",
+    "Foto lebih baik menggunakan foto dengan aspek rasio 1:1 atau 16:4"
+  ]
+}

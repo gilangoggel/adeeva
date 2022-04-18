@@ -1,24 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, BelongsTo, belongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
+import { cities } from 'App/Enums/cities'
 
 export default class Reseller extends BaseModel {
-  /**
-   * Attribute dari relasi database
-   */
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
   /**
    * Attribute dari kolom database
    */
   @column()
-  public name: string
-  @column()
   public address: string
   @column()
-  public user_id: number
+  public userId: number
   @column()
-  public city_id: number
+  public cityId: number
   @column()
   public balance: number
   @column()
@@ -31,4 +25,17 @@ export default class Reseller extends BaseModel {
   public createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+  @computed()
+  public get city(): string {
+    const check = cities.find((item) => {
+      return parseInt(item.city_id) == this.cityId
+    })
+    if (check) return `${check.type} ${check.city_name}`
+    return ''
+  }
+  /**
+   * Attribute dari relasi database
+   */
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }

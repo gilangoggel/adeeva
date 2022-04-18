@@ -5,7 +5,7 @@ export default class Users extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').unsigned()
       table.string('email')
       table.string('name')
       table.string('password')
@@ -13,8 +13,7 @@ export default class Users extends BaseSchema {
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamps(true,true);
     })
   }
 

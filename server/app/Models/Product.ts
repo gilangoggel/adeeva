@@ -28,11 +28,11 @@ export default class Product extends BaseModel {
     },
   })
   public image: string
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true ,serializeAs:"createdAt" })
   public createdAt: DateTime
-  @column.dateTime()
+  @column.dateTime({serializeAs:null})
   public deletedAt?: DateTime
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs:"updatedAt" })
   public updatedAt: DateTime
   @column()
   public pax: number
