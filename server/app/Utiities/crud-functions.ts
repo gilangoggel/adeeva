@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 type Payload = Record<string, any>
 type Entity = InstanceType<LucidModel>
 
-type SaveActionArgs<T extends Entity> = {
+export type SaveActionArgs<T extends Entity> = {
   payload: Payload
   entity: T
   context: HttpContextContract

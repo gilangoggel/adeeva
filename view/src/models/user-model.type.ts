@@ -1,4 +1,4 @@
-import type {Instance} from 'mobx-state-tree';
+import type {Instance, SnapshotIn} from 'mobx-state-tree';
 import { types as t} from 'mobx-state-tree'
 
 export const userModelType = t.model({
@@ -9,6 +9,11 @@ export const userModelType = t.model({
     "ADMINISTRATOR", 'RESELLER', 'USER'
   ]),
   createdAt: t.string,
-  updatedAt: t.maybeNull(t.string)
-}).named('user')
+  updatedAt: t.maybeNull(t.string),
+  picture: t.optional(t.string, "")
+}).named('user').actions(self=>({
+  update(values: Partial<SnapshotIn<typeof self>>){
+    Object.assign(self, values);
+  }
+}))
 export type IUserModel = Instance<typeof userModelType['Type']>

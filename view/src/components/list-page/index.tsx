@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ListPageProps } from './type'
-import { Table, TableContainer, TableHead, Paper, TableBody, Box } from '@mui/material'
+import { Table, TableContainer, TableHead, Paper, TableBody, Box, Typography, TableRow,TableCell } from '@mui/material'
 import { Header } from './header'
 import { Row } from './Row'
 import { Hoc } from './Hoc'
@@ -42,7 +42,7 @@ const Head = memo( ({ columns } : HeadProps) => {
 },(p, n)=>p.columns.length === n.columns.length)
 
 const Body = ({data, columns}: BodyProps) => {
-  return ( (
+  return (
     <TableBody sx={{bgcolor:'white'}} component='div'>
       {
         data.map(item=>(
@@ -50,7 +50,7 @@ const Body = ({data, columns}: BodyProps) => {
         ))
       }
     </TableBody>
-  ))
+  )
 }
 
 
@@ -97,10 +97,19 @@ export const ListPage = (props : ListPageProps<any>) => {
           <PageHeader filter={filter} title={title}/>
           <MetaView {...meta} />
           <TableContainer>
-            <Table component='div'>
-              <Head columns={columns}/>
-              <Body data={data} columns={columns}/>
-            </Table>
+            {
+              ! data.length ?
+                <Box sx={{p:2, bgcolor:'white'}}>
+                  <Typography component='div' variant='caption' align='center'>
+                    Data tidak di temukan
+                  </Typography>
+                </Box> : (
+                  <Table component='div'>
+                    <Head columns={columns}/>
+                    <Body data={data} columns={columns}/>
+                  </Table>
+                )
+            }
           </TableContainer>
         </Paper>
       </Hoc>

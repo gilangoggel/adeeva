@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import {relationHelper} from "App/Utiities/relation-helper";
 
 export default class TransactionItems extends BaseSchema {
   protected tableName = 'transaction_items'
@@ -9,14 +10,15 @@ export default class TransactionItems extends BaseSchema {
       table.integer('product_id').unsigned()
       table.integer('transaction_id').unsigned()
       table.integer('discount').unsigned().defaultTo(0)
-      table.float('total').unsigned()
-      table.float('sub_total').unsigned()
-      table.float('amount').unsigned()
+      table.double('total').unsigned()
+      table.double('sub_total').unsigned()
+      table.double('amount').unsigned()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-       table.timestamps(true,true);
-      
+      table.timestamp('created_at', { useTz: true }).nullable()
+      table.timestamp('updated_at', { useTz: true }).nullable()
+      relationHelper(table, {key: "product_id", on: "products"})
     })
   }
 

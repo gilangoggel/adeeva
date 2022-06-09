@@ -1,10 +1,13 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Transaction from 'App/Models/Transaction'
+import Product from "App/Models/Product";
 
 export default class TransactionItem extends BaseModel {
   @belongsTo(() => Transaction)
   public transaction: BelongsTo<typeof Transaction>
+  @belongsTo(() => Product)
+  public product: BelongsTo<typeof Product>
   /**
    * Attribute dari kolom database
    */

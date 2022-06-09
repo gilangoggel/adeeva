@@ -4,6 +4,9 @@ import { SignIn } from '../pages/sign-in'
 import { SignUp } from '../pages/sign-up'
 import { DefaultPage } from '../pages/default-page'
 import { Product as product } from '../pages/product'
+import { Checkout as checkout } from '../pages/checkout'
+import { Account as account } from '../pages/account'
+import { Search as search } from '../pages/search'
 /**
  * Admin pages
  */
@@ -17,6 +20,11 @@ import { Edit as AdminEditProduct } from '../pages/admin/product/edit'
 import { Show as AdminShowProduct } from '../pages/admin/product/show'
 import { List as AdminListUser } from '../pages/admin/user/list'
 import { ResellerOrder as AdminResellerOrder } from '../pages/admin/reseller/order'
+import { AdminOrder } from '../pages/admin/order'
+import { AdminTransaction } from '../pages/admin/transaction'
+import { AdminRetur } from '../pages/admin/retur'
+import { AdminShipment } from '../pages/admin/shipment'
+
 /**
  * Reseller
  */
@@ -25,6 +33,7 @@ import { Add as ResellerAddProduct } from '../pages/reseller/product/add'
 import { Order as ResellerOrderProduct } from '../pages/reseller/product/order'
 import { List as ResellerOrderList } from '../pages/reseller/order/list'
 import { Show as ResellerOrderShow } from '../pages/reseller/order/show'
+import { ResellerTransaction } from '../pages/reseller/transaction'
 
 
 
@@ -33,7 +42,10 @@ import {wrapLayoutComponent} from "@utils/wrap-layout-component";
 
 const pages= {
   main: Main,
+  checkout,
+  account,
   product,
+  search,
   'sign-in': SignIn,
   'sign-up': SignUp,
   reseller:{
@@ -46,10 +58,23 @@ const pages= {
     order:{
       show: ResellerOrderShow,
       list: ResellerOrderList
-    }
+    },
+    transaction:ResellerTransaction
   },
   admin:{
     dashboard: AdminDashboard,
+    transaction:{
+      list: AdminTransaction
+    },
+    shipment:{
+      list: AdminShipment
+    },
+    retur:{
+      list: AdminRetur
+    },
+    order:{
+      list: AdminOrder
+    },
     product:{
       list : AdminProductList,
       create : AdminProductCreate,

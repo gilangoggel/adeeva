@@ -1,65 +1,100 @@
 import {wrapLayoutComponent} from "@utils/wrap-layout-component";
-import {Box, Button, Container, Paper, TextField, Typography} from '@mui/material'
-import { rootSx } from './styles'
+import {Box} from '@mui/material'
 import { motion } from 'framer-motion'
-import {useFormUtils} from "@hooks/use-form-utils";
-import {usePage} from "@inertiajs/inertia-react";
+import { FormContainer } from './form-container'
+import {observer} from "mobx-react";
+import {layoutStore} from "@components/layout/common/store";
+import {useIsSm} from "@hooks/use-is-sm";
 
-
-const initial = {
-  email: "",
-  password: ""
+const sx = {
+  display: 'flex',
+  flexDirection:['column','row'],
+  "& .img-container":{
+    width: ["100%","50%"],
+    // bgcolor:"primary.main",
+    display: 'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign: 'center',
+  },
+  "& img":{
+    width: '50%',
+    height: "50%"
+  },
+  "& h1":{
+    color:'primary.main',
+    textAlign:'center',
+    mt: 3,
+    fontWeight:"bolder",
+    fontSize:["1.5rem","3rem"]
+  },
+  "& .form-container":{
+    width: ['100%',"50%"],
+    display: 'flex',
+    alignItems: 'center',
+    bgcolor:"primary.main",
+    justifyContent: "center",
+    "& > div":{
+      width: "50%",
+      bgcolor:"white",
+      p: 10,
+      // flex: 1,
+    }
+  }
+}
+const transition = {
+  x:{
+    type: "tween",
+    duration: 1,
+  },
+  opacity: {
+    duration : 1
+  }
 }
 
-function Form() {
-  const { fieldUtility, onSubmit, data } = useFormUtils<typeof initial>(initial)
-  const { authError } = usePage().props
-
-  return (
-    <form onSubmit={onSubmit('/sign-in')}>
-      <div className='field-container'>
-        <TextField {...fieldUtility('email', true)} fullWidth size='small' variant='filled' label='Alamat email' />
-      </div>
-      <div className='field-container'>
-        <TextField {...fieldUtility('password', true)} type='password' fullWidth size='small' variant='filled' label='Password' />
-      </div>
-      <div className="field-container">
-        <Button className='font-poppins' type='submit' fullWidth variant='contained'>
-          Log in
-        </Button>
-      </div>
-      <Typography variant='caption' className='font-poppins'>
-        {authError ? "Kombinasi email / password anda tidak sesuai" : ""}
-      </Typography>
-    </form>
-  )
+const imgProps = {
+  initial: {
+    x: "-100%",
+    opacity:0
+  },
+  animate:{
+    x: 0,
+    opacity:1
+  },
+  transition
+}
+const formAnimation = {
+  initial: {
+    opacity: 0
+  },
+  animate:{
+    opacity: 1,
+    transition:{
+      delay: 1
+    }
+  },
+  transition
 }
 
-function Page() {
+const Page = observer( () => {
+  const isSm = useIsSm();
+  const height = isSm ? 'fit-content' : layoutStore.get100Vh()
   return (
-    <Container
-      initial={{
-        opacity: 0
-      }}
-      animate={{
-        opacity: 1
-      }}
-      component={motion.div}
-    >
-      <Box sx={rootSx}>
-        <div className='container'>
-          <div className="form-text" />
-          <div className="form-container">
-            <Paper sx={{p: 2}}>
-              <h1 className='font-poppins'>
-                Login
-              </h1>
-              <Form/>
-            </Paper>
-          </div>
+    <Box sx={sx as any}>
+      <motion.div {...imgProps} key='c' style={{height}} className="img-container">
+        <div>
+          <img src="/assets/login.svg" alt=""/>
+          <h1 className='font-poppins'>
+            Selamat datang
+          </h1>
         </div>
-      </Box>
-    </Container>
+      </motion.div>
+      <motion.div {...formAnimation} className="form-container">
+        <div>
+          <FormContainer/>
+        </div>
+      </motion.div>
+    </Box>
   );
-}
+})
 export const SignIn = wrapLayoutComponent(Page)

@@ -15,6 +15,14 @@ export default class RoleMiddleware {
           return next()
         }
         return response.redirect().back()
+      }).catch((e)=> {
+        if (! auth.user){
+          return response.redirect().toPath("/sign-in");
+        }
+        return response.abort({
+          error: true,
+          traces: e
+        })
       })
   }
 }

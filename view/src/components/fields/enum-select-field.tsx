@@ -22,8 +22,9 @@ class EnumSelectField extends PureComponent<ComponentProps, State> {
 
   constructor(props: any) {
     super(props);
+    const { value } = this.props;
     this.state = {
-      selected: '__disabled'
+      selected: value??'__disabled'
     }
   }
 

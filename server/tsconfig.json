@@ -1,7 +1,8 @@
 {
   "extends": "./node_modules/adonis-preset-ts/tsconfig",
   "include": [
-    "**/*"
+    "**/*",
+    "lib/rajaonkir-api/type.d.ts"
   ],
   "exclude": [
     "node_modules",
@@ -33,7 +34,9 @@
       "@adonisjs/shield",
       "@adonisjs/lucid",
       "@adonisjs/auth",
-      "@eidellev/inertia-adonisjs"
-    ]
-  }
+      "@eidellev/inertia-adonisjs",
+      "xendit-node"
+    ],
+  },
+
 }

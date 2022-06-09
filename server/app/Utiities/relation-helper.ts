@@ -8,5 +8,10 @@ type Config = {
 }
 
 export function relationHelper(table: CreateTableBuilder, {references = 'id', key, on}: Config){
-  table.foreign(key).references(references).inTable(on)
+  table
+    .foreign(key)
+    .references(references)
+    .inTable(on)
+    .onUpdate('cascade')
+    .onDelete('cascade')
 }

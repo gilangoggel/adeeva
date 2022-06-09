@@ -1,8 +1,12 @@
 import { useBackoffice } from './provider'
 import { ItemGroup, LinkItem } from './types'
-import {Collapse, List, ListItem, ListItemText, Divider, ListItemIcon} from "@mui/material";
+import { Box,Collapse, List, ListItem, ListItemText, Divider, ListItemIcon} from "@mui/material";
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import {useState} from "react";
+import {useMemo, useState} from "react";
+import { AdminChat } from '../../features/chat'
+import {useAuth} from "@hooks/use-auth";
+import { AdminChatProvider } from '@root/provider/admin-chat-provider'
+import { ResellerChatProvider } from '@root/provider/reseller-chat-provider'
 
 const itemSx = {
   '&[data-selected="true"]':{
@@ -70,6 +74,8 @@ const NavigatorItem = ({ items, title } : ItemGroup) => {
 
 export const Navigator = () => {
   const { links } = useBackoffice();
+  const { role } = useAuth();
+  const ChatProvider = useMemo(()=>role === "ADMINISTRATOR" ? AdminChatProvider: ResellerChatProvider, [role]);
   return (
     <div className='wrap'>
       <Item to='/dashboard'  text='Dashboard'/>
@@ -80,6 +86,11 @@ export const Navigator = () => {
           ))
         }
       </List>
+      <Box sx={{px:1}}>
+        <ChatProvider>
+          <AdminChat/>
+        </ChatProvider>
+      </Box>
     </div>
   );
 };

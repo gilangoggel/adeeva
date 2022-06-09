@@ -15,6 +15,11 @@ export abstract class BackofficeController<T extends InstanceType<LucidModel>> {
   abstract resolveModel(): T
   abstract onDestroy: DestroyAction<T>
 
+
+  protected cheryPick(): Record<string, any> {
+    return {}
+  }
+
   protected getMessages(): any {
     return undefined
   }
@@ -54,7 +59,9 @@ export abstract class BackofficeController<T extends InstanceType<LucidModel>> {
     const paginate = await this.getBuilder(request.all()).paginate(page, 10)
     return inertia.render(this.resolveUiPath('list'), {
       // @ts-ignore
-      paginator: await paginate.serialize(),
+      paginator: await paginate.serialize(
+        this.cheryPick()
+      ),
       query: request.all(),
     })
   }

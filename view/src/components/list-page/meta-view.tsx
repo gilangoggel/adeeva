@@ -6,7 +6,7 @@ import { useListPage } from './Hoc'
 
 const sx = {
   p: 2,
-  pb: 0,
+  pb: 2,
   color: "white",
   "& > p":{
     fontWeight:"bold"
@@ -47,16 +47,22 @@ export const MetaView = ({ current_page, per_page, total }: Meta) => {
 
   return (
     <Box sx={sx}>
-      <p className='font-poppins'>
-        Total {total} data
-      </p>
-      <Pagination
-        onChange={onPageChange}
-        sx={paginatorSx}
-        count={Math.ceil(total / per_page)}
-        page={current_page}
+      {
+        total ?
+        <p className='font-poppins'>
+          Total {total} data
+        </p>: null
+      }
+      {
+        total ?
+          <Pagination
+            onChange={onPageChange}
+            sx={paginatorSx}
+            count={Math.ceil(total / per_page)}
+            page={current_page}
 
-      />
+          /> : null
+      }
     </Box>
   );
 };

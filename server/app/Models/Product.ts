@@ -1,12 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, column, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
 import Env from '@ioc:Adonis/Core/Env'
+import Comment from "App/Models/Comment";
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
   public id: number
   @column()
   public name: string
+  @column()
+  public weight: number
   @column()
   public price: number
   @column({ columnName: 'reseller_price', meta: 'resellerPrice' })
@@ -21,6 +24,9 @@ export default class Product extends BaseModel {
         return ''
       }
       let base = Env.get('HOST')
+      if(base !== "localhost"){
+        base = "localhost"
+      }
       if (Env.get('NODE_ENV') === 'development') {
         base = `http://${base}:${Env.get('PORT')}`
       }
@@ -36,4 +42,8 @@ export default class Product extends BaseModel {
   public updatedAt: DateTime
   @column()
   public pax: number
+
+  @hasMany(()=>Comment, {serializeAs:null})
+  comments: HasMany<typeof Comment>
+
 }

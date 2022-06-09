@@ -1,46 +1,48 @@
 import Route from '@ioc:Adonis/Core/Route'
+import { adminRoute } from './admin-route'
+import { userRoutes } from './user-routes'
+import { resellerRoute } from './reseller-route'
 
 Route.get('/', 'main-controller.main').as("home")
 Route.get('/category/:category', 'main-controller.main').as('category_page')
-Route.get('/search', 'main-controller.main').as('search_page')
+Route.get('/search', 'search-controller.index').as('search_page')
 Route.get('/product/:name', 'main-controller.product')
+Route.post('/product/:id/comment', 'main-controller.addComment')
 
+Route.group(()=>{
+  Route.group(()=>{
+    Route.get("", 'main-controller.checkout')
+  }).middleware("role:USER")
+  Route.post("", 'user/checkout-controller.checkout')
+  Route.post("reseller-list", 'user/checkout-helper-controller.resellerList')
+  Route.post("shipment-cost", 'user/shipment-controller.cost')
+  Route.get("payment-simulator", 'user/payment-simulator.index')
+}).prefix("checkout")
+Route.group(userRoutes).middleware("role:USER");
 
+// Route.post("checko", 'user/transaction-controller.checkoutMeta')
+
+Route.group(()=>{
+  Route.get("account", 'user/account-controller.account')
+  Route.post("account/change/:type", 'user/account-controller.update')
+  Route.post("account/profile", 'account-controller.profile');
+  Route.post("account/credential", 'account-controller.credential');
+  Route.post("transaction/retur/:id", 'shared/retur-controller.store');
+  Route.post("transaction/retur/:id/send", 'shared/retur-controller.send');
+}).middleware("auth")
 
 Route.get('/sign-in', 'auth-controller.showLogin')
+Route.get('/sign-up', 'auth-controller.signup')
+Route.post('/sign-up', 'auth-controller.register')
 Route.post('/sign-in', 'auth-controller.login')
 Route.post('/logout', 'auth-controller.logout')
 
-Route.group(() => {
-  Route.get('/dashboard', 'admin/admin-controller.index')
-  Route.get('/', 'admin/admin-controller.index')
-  Route.resource('product', 'admin/product-controller')
-
-  Route.resource('reseller', 'admin/reseller-controller')
-  Route.resource('reseller-order', 'shared/reseller-order-controller').only([
-    "update", "index", "show"
-  ])
-  Route.resource('user', 'admin/user-controller')
-})
+Route.group(adminRoute)
   .middleware('role:ADMINISTRATOR')
   .prefix('admin')
-Route.group(() => {
-  Route.get('/dashboard', 'reseller/reseller-dashboard-controller.index')
-  Route.get('/', 'reseller/reseller-dashboard-controller.index')
-  Route.get('/product', 'reseller/product-controller.index')
-  // Route.get('/product/add', 'reseller/product-controller.add')
-  // Route.get('/product/order', 'reseller/product-controller.order')
-  // Route.get('/product/order/:id', 'reseller/product-controller.orderDetail')
-  Route.get('/orders', 'reseller/order-controller.index')
-  Route.get('/order/:orderId', 'reseller/order-controller.show')
-  Route.group(()=>{
-    const controller = 'shared/reseller-order-controller';
-    Route.get('/add', `${controller}.create`);
-    Route.get('/order', `${controller}.index`);
-    Route.post('/order', `${controller}.store`);
-    Route.get('/order/:id', `${controller}.show`)
-    Route.put('/order/:id', `${controller}.update`)
-  }).prefix("product")
-})
+Route.group(resellerRoute)
   .middleware('role:RESELLER')
   .prefix('reseller')
+Route.get('/auth', ({auth})=>{
+  return auth.user
+}).middleware('auth')

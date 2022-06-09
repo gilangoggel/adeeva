@@ -1,7 +1,8 @@
+
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import User from 'App/Models/User'
 import Hash from '@ioc:Adonis/Core/Hash'
-import 'minifaker/locales/en'
+
 
 const roles = ['administrator', 'user'];
 

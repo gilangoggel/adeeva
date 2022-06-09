@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, BelongsTo, belongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, column, BelongsTo, belongsTo, computed, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import { cities } from 'App/Enums/cities'
+import ResellerProduct from "App/Models/ResellerProduct";
 
 export default class Reseller extends BaseModel {
   /**
@@ -38,4 +39,9 @@ export default class Reseller extends BaseModel {
    */
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
+  /**
+   * Attribute dari relasi database
+   */
+  @hasMany(() => ResellerProduct)
+  public productList: HasMany<typeof ResellerProduct>
 }

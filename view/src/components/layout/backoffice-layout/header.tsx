@@ -1,7 +1,7 @@
-import { AppBar, Toolbar, Box } from '@mui/material'
-import { AccountCircle } from '@mui/icons-material'
+import {AppBar, Toolbar, Box, Container} from '@mui/material'
 import {Inertia} from "@inertiajs/inertia";
 import { UserControl } from '../user/user-control'
+import { Notification } from '../common/notification'
 
 const toHome = () => {
   Inertia.get("/")
@@ -17,23 +17,19 @@ export const Header = () => {
 
   return (
     <AppBar sx={sx} elevation={3}>
-      <Toolbar>
-        <h1 onClick={toHome} className='font-poppins'>
-          Adeeva
-        </h1>
-        <Box sx={{ml:'auto', 'color': 'white', button:{
-          color:'white'
-          }}}>
-          <UserControl disableBackoffice/>
-        </Box>
-        {/*<Button*/}
-        {/*  startIcon={*/}
-        {/*    <AccountCircle/>*/}
-        {/*  }*/}
-        {/*  sx={{ml: "auto", color:"white"}}>*/}
-        {/*  Akun*/}
-        {/*</Button>*/}
-      </Toolbar>
+      <Container>
+        <Toolbar>
+          <h1 onClick={toHome} className='font-poppins'>
+            Adeeva
+          </h1>
+          <Box sx={{ml:'auto', 'color': 'white', button:{
+              color:'white'
+            }}}>
+            <Notification/>
+            <UserControl disableBackoffice/>
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 };

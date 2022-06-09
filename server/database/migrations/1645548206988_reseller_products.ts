@@ -13,8 +13,8 @@ export default class ResellerProducts extends BaseSchema {
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-       table.timestamps(true,true);
-
+      table.timestamp('created_at', { useTz: true }).nullable()
+      table.timestamp('updated_at', { useTz: true }).nullable()
       relationHelper(table, {
         key: 'reseller_id',
         on: "resellers"

@@ -1,5 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { registerSchema } from 'App/schema/register'
+import User from "App/Models/User";
+import Hash from "@ioc:Adonis/Core/Hash";
 
 const loginSchema = schema.create({
   email: schema.string({}, [
@@ -12,22 +15,21 @@ const loginSchema = schema.create({
   password: schema.string(),
 })
 class AuthController {
-  public showLogin = async ({ inertia, auth, response, session }: HttpContextContract) => {
-    if (!(await this.isUnAuthenticated(auth))) {
-      return response.redirect().toPath('/')
-    }
-    const authError = session.get('authError') ?? null
-    session.forget('authError')
-    return inertia.render('sign-in', {
-      authError,
+  public showLogin = async ({ inertia, auth, request, session, response }: HttpContextContract) => {
+    return auth.use('web').authenticate().then( async (user)=>{
+      if (user){
+        await auth.use('web').login(user)
+      }
+      return user ? response.redirect().toPath("/") : response.redirect().toPath("/sign-in");
+    }).catch(()=>{
+      const authError = session.get('authError') ?? null
+      session.forget('authError')
+      return inertia.render('sign-in', {
+        authError,
+        registered : request.input("register" , '')
+      })
     })
   }
-  private isUnAuthenticated = (auth: any) =>
-    auth
-      .authenticate()
-      .then((user) => !user)
-      .catch(() => true)
-
   public login = async ({ request, auth, response, session }: HttpContextContract) => {
     const { email, password } = await request.validate({
       schema: loginSchema,
@@ -36,22 +38,38 @@ class AuthController {
         exists: 'Alamat email belum terdaftar',
       },
     })
-    const guard = auth.use('web')
-    if (!(await this.isUnAuthenticated(auth))) {
-      return response.redirect().toPath('/')
-    }
+    const guard = auth;
     return guard
       .attempt(email, password)
-      .then(() => response.redirect().toPath('/'))
+      .then( async (e) => {
+        await auth.login(e)
+        return response.redirect().toPath("/");
+      })
       .catch(async () => {
         await session.put('authError', true)
         return response.redirect().toPath('/sign-in')
       })
   }
-
   public logout = async ({ auth, response }: HttpContextContract) => {
     await auth.logout()
     return response.redirect().toPath('/')
+  }
+  public signup = ({inertia, auth, response}: HttpContextContract) => {
+    if (auth.user){
+      return response.redirect().toPath("/")
+    }
+    return inertia.render("sign-up")
+  }
+  public register = async ({ request, response }: HttpContextContract) =>{
+    const validated = await request.validate({
+      schema: registerSchema
+    })
+     await User.create({
+      ...validated,
+      role: "USER",
+      password: await Hash.make(validated.password)
+    })
+    return response.redirect().toPath(`/sign-in?register=${validated.email}`)
   }
 }
 

@@ -12,7 +12,6 @@ const QtyForm = () => {
   const onSubmit = () =>{
     addToChartWithAmount(qty)
   }
-
   const onAdd = useCallback(() => {
     setQty(p=>p+1)
   },[])

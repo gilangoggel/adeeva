@@ -1,3 +1,4 @@
+
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Product from 'App/Models/Product'
 import ResellerProduct from 'App/Models/ResellerProduct'

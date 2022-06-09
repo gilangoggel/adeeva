@@ -2,8 +2,37 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Product from "App/Models/Product";
 import { sampleSize } from 'lodash'
 import voca from 'voca';
+import { transactionLoader } from '../Helper/transaction-functions'
+import Transaction from "App/Models/Transaction";
+import {schema} from "@ioc:Adonis/Core/Validator";
+import Comment from "App/Models/Comment";
 
 class MainController {
+
+  checkTransaction = async (session: HttpContextContract['session']) => {
+    const has = session.has("transactionId");
+    if (! has) return {};
+    const model = await Transaction.find((session.get("transactionId")));
+    if (! model) return {};
+    const statuses = [1,2,3,4,5].map(t=>t.toString()).includes(model.status as string)
+    if (statuses){
+      session.forget("transactionId");
+    }
+    await transactionLoader(model);
+    return {
+      transaction: model
+    };
+  }
+
+  checkout = async ({inertia, auth, session}: HttpContextContract) => {
+    await auth.authenticate();
+    await auth.user?.load('profile');
+    const {transaction} = await this.checkTransaction(session);
+    return inertia.render("checkout", {
+      profile: auth.user?.profile,
+      transaction: transaction ? transaction : null
+    })
+  }
 
   product = async ({inertia, params : {name}}: HttpContextContract) => {
     if (! name){
@@ -11,7 +40,6 @@ class MainController {
     }
     const query = voca(name as string).replaceAll(`_`, ' ').value()
     const product = await Product.query().where('name', 'like', `${query}`).first();
-    console.log(query)
     if (! product){
       return inertia.redirectBack();
     }
@@ -19,12 +47,37 @@ class MainController {
       .whereNot('id', product.id)
       .where('category', 'like', product.category)
       .limit(5)
+    const data = product;
+    await product.load("comments", p=>p.orderBy('created_at', 'desc'))
     return inertia.render('product', {
-      product,
-      recomendations
+      product : data.serialize(),
+      recomendations,
+      comments: product.comments.map(item=>item.serialize())
     });
   }
 
+  addComment = async ({ request, auth, params, response }: HttpContextContract) => {
+    const input = await request.validate({
+      schema: schema.create({
+        content: schema.string(),
+        rating: schema.number(),
+        username: schema.string()
+      })
+    });
+    const product = await Product.find(params.id);
+    if (! product) return response.abort({}, 404);
+    if (auth.user){
+      Object.assign(input,{
+        user_id: auth.user.id
+      })
+    }
+    Object.assign(input,{
+      product_id : product.id
+    })
+    const comment = await Comment.create(input);
+
+    return comment.serialize()
+  }
 
   public getHighlightProduct = async ({ session }: HttpContextContract) => {
     const name = 'hightlight-product';
@@ -35,7 +88,7 @@ class MainController {
       await session.put(name, items.map(item=>item.id))
       return items;
     }
-    if (preserve.length  === 5){
+    if (preserve.length  === 2){
       await session.forget(name)
       return this.getHighlightProduct({session} as any)
     }

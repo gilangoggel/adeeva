@@ -11,7 +11,7 @@ type Props = {
 
 export const ProductList = ({products} : Props) => {
   return (
-    <Grid container>
+    <Grid container spacing={5} sx={{mb: 10}}>
       {
         products.map(item=>(
           <ProductUtilsProvider key={item.id} {...item} >

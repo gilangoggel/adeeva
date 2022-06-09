@@ -87,7 +87,7 @@ const sessionConfig: SessionConfig = {
   cookie: {
     path: '/',
     httpOnly: true,
-    sameSite: false,
+    sameSite: true,
   },
 
   /*
@@ -100,7 +100,7 @@ const sessionConfig: SessionConfig = {
   |
   */
   file: {
-    location: Application.tmpPath('sessions'),
+    location: Application.tmpPath('app-session'),
   },
 
   /*

@@ -1,27 +1,24 @@
 import {observer} from "mobx-react";
-import {useGlobalStore} from "@root/provider/globar-store-provider";
-import { Inertia } from '@inertiajs/inertia'
 import {useAuthListener} from "@hooks/auth-hooks";
 import {wrapLayoutComponent} from "@utils/wrap-layout-component";
 import { HighlightProducts } from '@components/home/highlight-product'
-import { ProductList } from '@components/home/product-list'
 import { PublicContext, publicPageStore } from '@stores/public-page-store'
 import {usePage} from "@inertiajs/inertia-react";
 import {useEffect, useMemo} from "react";
-import { AnimatePresence, motion } from 'framer-motion'
-
-const toLogin = () => {
-  Inertia.get('/sign-in');
-}
-const logout = () => {
-  Inertia.post('/logout', {}, {});
-}
+import { FeatureBar } from './feature-bar'
+import { Recomendations } from './recomendations'
+import { Container } from "@mui/material"
+import {useCheckAuth} from "@root/provider/check-auth-provider";
 
 const Home = observer( ({highlight = true}) => {
-  const store  = useGlobalStore();
   useAuthListener();
-  const {user} = store;
   const { mode } = usePage().props
+
+  const checkAuth = useCheckAuth();
+
+  useEffect(()=>{
+    checkAuth();
+  },[])
 
   const publicStore = useMemo(()=>{
     return publicPageStore.create({
@@ -32,14 +29,20 @@ const Home = observer( ({highlight = true}) => {
   useEffect(()=>{
     publicStore.updateMode(mode as any)
   }, [mode])
-  console.log(mode)
   return (
     <PublicContext.Provider value={publicStore}>
       {
         publicStore.mode === "list" ?
-          <HighlightProducts/> : null
+          <>
+            <HighlightProducts/>
+            <FeatureBar/>
+          </>
+          : null
       }
-      <ProductList/>
+      <Container sx={{my:10, textAlign:'center'}}>
+        <h1>Deskripsi adeva</h1>
+      </Container>
+      <Recomendations/>
     </PublicContext.Provider>
   );
 })

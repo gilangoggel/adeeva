@@ -22,19 +22,19 @@ const resellerLinks : ItemGroup [] = [
     title: "Transaksi",
     items:[
       {
-        to: "transaction",
-        text: "Transaksi selesai"
-      },
-      {
         to: "/transaction/order",
         text: "Order"
       },
       {
-        to: "/transaction/shipping",
-        text: "Pesanan terkirim"
+        to: "/transaction/shipment",
+        text: "Pengiriman"
       },
       {
-        to: "/transaction/invalid",
+        to: "/transaction/completed",
+        text: "Transaksi selesai"
+      },
+      {
+        to: "/transaction/retur",
         text: "Pesanan yang dibatalkan"
       },
     ]
@@ -85,16 +85,16 @@ const adminLinks : ItemGroup[] = [
     title: "Transaksi",
     items:[
       {
-        to: "/transaction",
-        text: "Data transaksi"
-      },
-      {
         to: "/order",
         text: "Order"
       },
       {
         to: "/shipment",
         text: "Pengiriman"
+      },
+      {
+        to: "/transaction",
+        text: "Transaksi"
       },
       {
         to: "/retur",

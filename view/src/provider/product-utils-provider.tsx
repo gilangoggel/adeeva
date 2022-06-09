@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Inertia} from "@inertiajs/inertia";
 import voca from 'voca'
+import { userCartStore } from '@stores/cart-store'
 
 
 type Actions = Record<'navigateToProduct'| 'addToWishlist' | 'addToCart', ()=>void> & {
@@ -15,8 +16,6 @@ export function useProduct(){
 }
 
 export class ProductUtilsProvider extends React.Component<IProduct> {
-
-
   navigateToProduct = () => {
     const query = voca(this.props.name).replaceAll(" ", "_")
     return Inertia.get(`/product/${query}`)
@@ -25,13 +24,11 @@ export class ProductUtilsProvider extends React.Component<IProduct> {
     console.log('todo add to wishlist')
   }
   onAddToCart = () => {
-    console.log('todo add to cart')
+    userCartStore.push(this.props, 1)
   }
-
   onAddToChartWithN = (n : number) => {
-    console.log(n)
+    userCartStore.push(this.props, n)
   }
-
   getContext = () : UseProduct => [
     this.props,
     {

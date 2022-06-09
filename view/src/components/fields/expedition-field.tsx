@@ -2,7 +2,7 @@ import { makeEnumSelectField, Option } from './enum-select-field'
 import {Box} from "@mui/material";
 
 const map : Record<string, string> = {
-  jet: "jet.ico",
+  tiki: "tiki.png",
   jne: "jne.jpg",
   pos: "pos.png"
 }
@@ -32,7 +32,7 @@ const Content = ({expedition} : {expedition: string}) => {
   )
 }
 
-const options: Option[] = ['jet', 'jne', 'pos'].map((value)=>(
+const options: Option[] = ['tiki', 'jne', 'pos'].map((value)=>(
   {
     label : <Content expedition={value}/>,
     value

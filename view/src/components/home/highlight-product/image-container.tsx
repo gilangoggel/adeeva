@@ -1,66 +1,130 @@
-import {Box, ImageListItem, useMediaQuery, useTheme} from "@mui/material";
+import {Button, Grid, Divider} from "@mui/material";
 import {formatMoney} from "@utils/format-money";
+import { motion } from 'framer-motion'
 
-const sx = {
-  position: "relative",
-  borderRadius:1,
-  cursor:"pointer",
-  "&:hover":{
-    "& > .mask":{
-      bgcolor:"rgba(0,0,0,0.50)"
-    }
-  },
-  "& .content":{
-    position: "absolute",
-    bottom: '1rem',
-    left: "1rem",
-    color:'white',
-    "& > div":{
-      lineHeight: "1"
-    },
-    "& h3":{
-      fontWeight:"normal",
-      display:"block"
-    }
-  },
-  "& img":{
-    zIndex: -1,
-    borderRadius:1,
-  },
-  "& .mask":{
-    borderRadius:1,
-    position: "absolute",
-    height: "100%",
-    width:"100%",
-    bgcolor:"rgba(0,0,0,0.20)",
-    transition: "all ease-in-out 0.5s"
-  },
+type P = IProduct & {
+  left: boolean
 }
-export const ImageContainer = ({image, expand, name, price}: IProduct & {expand: boolean}) => {
-  const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+
+const makeAnimation = (left: boolean) => {
+  return {
+    transition:{
+      x:{
+        type: "tween",
+        duration :0.5
+      }
+    },
+    initial:{
+      x: left ? '-100%' : '100%',
+      opacity: 0
+    },
+    animate:{
+      x: 0,
+      opacity: 1
+    },
+    exit:{
+      x: left ? '-100%' : '100%',
+      opacity: 0
+    }
+  }
+}
+
+export const ImageContainer = ({image, name, price, left}: P) => {
   return (
-    <ImageListItem
-      sx={sx}
-      cols={ expand ? 2 : 1}
-    >
-      <div className="mask"/>
-      <img
-        style={{background:"white"}}
-        alt={image}
-        src={image}
-        loading="lazy"
-      />
-      <div className="content">
-        <div className='font-poppins'>
+    <Grid component={motion.div} {...makeAnimation(left)} item xs={6} sx={sx as any} md={6}>
+      <div className="img-container">
+        <div
+          style={{
+            backgroundImage:`url(${image})`
+          }}
+          className="img"/>
+      </div>
+      <div className='name-container'>
+        <h2 className='font-raleway'>
+          {name}
+        </h2>
+      </div>
+      <div className='info-container'>
+        <p className='font-raleway price'>
+          Rp {formatMoney(price)}
+        </p>
+        <div className="btn-container">
           <div>
-            <h3>{name}</h3>
-            <p>
-              Rp {formatMoney(price)}
-            </p>
+            <Button className='font-raleway' variant='outlined' sx={{
+              color:'inherit'
+            }}>
+              Tampilkan produk
+            </Button>
+            <div className="divider-container">
+              <Divider className='divider'/>
+            </div>
           </div>
         </div>
       </div>
-    </ImageListItem>
+    </Grid>
   );
 };
+const sx = {
+  display: 'flex',
+  flexDirection: "column",
+  "& > .name-container":{
+    mb: "auto",
+    pt: 2
+  },
+  "& > .img-container":{
+    display: 'flex',
+    justifyContent: 'center',
+    "& > .img":{
+      cursor:"pointer",
+      width:['100%',576],
+      height: [256,576],
+      backgroundPosition:'center',
+      backgroundSize:["cover","contain"],
+      backgroundRepeat:"no-repeat"
+    },
+  },
+  textAlign:'center',
+  "& .info-container":{
+  },
+  "& h2":{
+    fontWeight:"light",
+    cursor:"pointer",
+    userSelect:"none",
+    fontSize:['0.8rem', 'inherit']
+  },
+  "& .price":{
+    my:2,
+    fontWeight:"light",
+    cursor:"pointer",
+    userSelect:"none"
+  },
+  "& .btn-container":{
+    display: 'flex',
+    justifyContent: 'center',
+    "& > div:hover":{
+      "& .divider":{
+        width: "100%"
+      }
+    }
+  },
+  "& .divider-container":{
+    display: 'flex',
+    mt: 1,
+    justifyContent: 'center',
+    "& .divider":{
+      width: "60%",
+      height: 1,
+      transition : "all ease-in-out .5s",
+      borderWidth:2
+    }
+  },
+  "& button":{
+    borderColor:"transparent",
+    transition:"all ease 0.4s",
+    py:1,
+    "&:hover":{
+      borderColor:"#a2a2a2",
+    },
+    fontWeight:"light"
+  }
+}

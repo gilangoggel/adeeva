@@ -1,5 +1,6 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 import { PaymentStatus } from 'App/Enums/payment-status'
+import {relationHelper} from "App/Utiities/relation-helper";
 
 export default class Transactions extends BaseSchema {
   protected tableName = 'transactions'
@@ -16,8 +17,6 @@ export default class Transactions extends BaseSchema {
       table.string('address')
       table.string('postal_code')
       table.string('name')
-      table.string('vac')
-      table.string('bank')
       table
         .enum('status', [
           PaymentStatus.WAIT_FOR_PAYMENT,
@@ -29,11 +28,14 @@ export default class Transactions extends BaseSchema {
         ])
         .defaultTo(PaymentStatus.WAIT_FOR_PAYMENT)
       table.float('total')
+      table.json("customs").defaultTo("{}");
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-       table.timestamps(true,true);
-
+      table.timestamp('created_at', { useTz: true }).nullable()
+      table.timestamp('updated_at', { useTz: true }).nullable()
+      relationHelper(table, {key: "customer_id", on: 'users'})
+      relationHelper(table, {key: "reseller_id", on: 'resellers'})
     })
   }
 

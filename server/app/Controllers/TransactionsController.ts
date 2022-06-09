@@ -91,7 +91,7 @@ export default class TransactionsController {
       ...input,
       total,
       vac: faker.creditCardNumber(),
-    })
+    } as any)
     await transaction.save()
     const transform = async (item: TransactionItems) => {
       item.transactionId = transaction.id

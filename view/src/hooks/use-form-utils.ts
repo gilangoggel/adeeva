@@ -35,10 +35,11 @@ type Config = {
   method?: "post" | "put"
   successMessage?: string
   onSuccess?(): void
+  disableSnackbar?:boolean
 }
 
 export function useFormUtils<T>(initialValue: any, config : Config = {}) : UseFormUtils<T>{
-  const { method = "post", successMessage = "Data berhasil di simpan", onSuccess : configOnSuccess } = config
+  const { disableSnackbar = false ,method = "post", successMessage = "Data berhasil di simpan", onSuccess : configOnSuccess } = config
   const { data, setData, processing, errors, submit, clearErrors } = useForm(initialValue);
   const [loading, setLoading] = useState(true);
   useEffect(()=>{
@@ -53,9 +54,11 @@ export function useFormUtils<T>(initialValue: any, config : Config = {}) : UseFo
   })
   const { enqueueSnackbar } = useSnackbar();
   const onSuccess = useCallback( () => {
-    enqueueSnackbar(successMessage,{
-      variant: "success"
-    })
+    if (! disableSnackbar){
+      enqueueSnackbar(successMessage,{
+        variant: "success"
+      })
+    }
     if (configOnSuccess){
       configOnSuccess();
     }
@@ -74,7 +77,8 @@ export function useFormUtils<T>(initialValue: any, config : Config = {}) : UseFo
   const submitOptions = {
     onSuccess,
     forceFormData: true,
-    preserveState: true
+    preserveState: true,
+    preserveScroll: true,
   }
   const onSubmit = useCallback( (url: string) => (e: any) => {
     e?.preventDefault();
@@ -103,5 +107,5 @@ export interface UseFormUtils<T> {
 }
 export const FormUtilsProvider = createContext<null| UseFormUtils<any>>(null)
 export function useFormUtilProvider<T>(){
-  return useContext(FormUtilsProvider) as UseFormUtils<T>
+  return useContext(FormUtilsProvider) as UseFormUtils<T>;
 }

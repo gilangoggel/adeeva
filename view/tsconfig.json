@@ -22,6 +22,7 @@
 			"@utils/*": ["src/utils/*"],
 			"@scripts/*": ["src/scripts/*"],
 			"@stores/*": ["src/stores/*"],
+			"@libs/*": ["src/lib/*"],
 		}
 	},
 	"include": ["src"],

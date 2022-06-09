@@ -13,11 +13,13 @@ export default class Products extends BaseSchema {
       table.double('reseller_price')
       table.text('description')
       table.integer('pax').defaultTo(1)
+      table.double('weight').defaultTo(0.3)
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
       table.timestamp('deleted_at').nullable()
-      table.timestamps(true,true);
+      table.timestamp('created_at', { useTz: true }).nullable()
+      table.timestamp('updated_at', { useTz: true }).nullable()
     })
   }
 

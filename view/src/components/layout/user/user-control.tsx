@@ -27,8 +27,8 @@ type LinkItem = {
 
 const commonLinks : LinkItem[] = [
   {
-    to: "/account-setting",
-    text: "Pengaturan akun"
+    to: "/account",
+    text: "Akun saya"
   },
 ]
 
@@ -72,7 +72,7 @@ type LogoutDialogProps = {
 }
 
 export const LogoutDialog = ( { onCancel, open } : LogoutDialogProps) => {
-  const { onSubmit } = useFormUtils({})
+  const { onSubmit } = useFormUtils({}, {disableSnackbar: true})
   return (
     <Dialog open={open} onClose={onCancel}>
       <DialogTitle>
