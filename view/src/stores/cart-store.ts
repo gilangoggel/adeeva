@@ -10,9 +10,9 @@ const itemModel = model({
   name: string,
   id: identifierNumber,
   amount: number,
-  image: string
+  image: string,
+  isWishlist: optional(types.boolean, false)
 }).actions((self)=>({
-
   increase(){
     self.amount = self.amount + 1
   },
@@ -23,13 +23,15 @@ const itemModel = model({
     }
     self.amount = next
   },
-
   setAmount(n: number){
     self.amount = n;
   },
   remove(){
     (getParent(self, 2) as any).remove(self);
-  }
+  },
+  moveToChart(){
+    self.isWishlist = false
+  },
 })).views(self=>({
   get subTotal(){
     return self.amount * self.price
@@ -53,18 +55,25 @@ const userCartModel = model('UserCartModel',{
       return self.stacks.size
     },
     get items() : CartItemType[]{
-      return Array.from(self.stacks.values())
-    }
+      return Array.from(self.stacks.values()).filter(item=>{
+        return ! item.isWishlist
+      })
+    },
+    get wishlists() : CartItemType[]{
+      return Array.from(self.stacks.values()).filter(item=>{
+        return item.isWishlist
+      })
+    },
   }))
   .actions((self)=>{
-    const push = ({id, price, name, image}: IProduct, amount: number) => {
+    const push = ({id, price, name, image}: IProduct, amount: number, isWishlist = false) => {
       const find = self.stacks.get(id.toString())
       if (find){
         find.setAmount(amount)
         return;
       }
       self.stacks.put({
-        id, price, name, amount, image
+        id, price, name, amount, image, isWishlist
       })
     }
     const remove = (model : CartItemType) => {

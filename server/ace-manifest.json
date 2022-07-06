@@ -1,5 +1,17 @@
 {
   "commands": {
+    "transaction:seeder": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/TransactionSeeder",
+      "commandName": "transaction:seeder",
+      "description": "Generate transaction data",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",
@@ -11,7 +23,8 @@
     },
     "list:routes": {
       "settings": {
-        "loadApp": true
+        "loadApp": true,
+        "stayAlive": true
       },
       "commandPath": "@adonisjs/core/build/commands/ListRoutes/index",
       "commandName": "list:routes",

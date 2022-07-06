@@ -11,6 +11,7 @@ import {usePage} from "@inertiajs/inertia-react";
 import {useEffect} from "react";
 import { Notification } from '../notification'
 import {useAuth} from "@hooks/use-auth";
+import { useAppHeader } from '../contexts/use-app-header'
 
 const sx = {
   ml: "auto",
@@ -27,15 +28,26 @@ const AccountControl = observer( () => {
   const [anchor, callback, force] = useButtonToggle()
   const auth = useAuth()
   const isAuthenticated = Boolean(auth)
+  const [, headerToggler ] = useAppHeader();
+  useEffect(()=>{
+    if (! isAuthenticated){
+      force();
+    }
+  }, [isAuthenticated])
   useEffect(()=>{
     force()
-  }, [user])
+  }, [user]);
+  const onClick = ( e: any ) => {
+    if (! isAuthenticated) return Navigation.toCallback('toSignIn')()
+    callback(e);
+    headerToggler('user_menu', true)()
+  }
   return (
     <>
       {isAuthenticated ?
         <UserMenu anchor={anchor} handleClose={callback}/> : null
       }
-      <IconButton onClick={isAuthenticated ? callback : Navigation.toCallback('toSignIn')}>
+      <IconButton onClick={onClick}>
         <AccountCircle/>
       </IconButton>
     </>

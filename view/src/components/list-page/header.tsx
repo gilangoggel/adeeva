@@ -41,7 +41,7 @@ const Icon = ({ direction, open }: {direction: 'ASC'| "DESC", open: boolean}) =>
 }
 
 
-export const Header = ({title, name, disableOrder, totalCol, type, hasImage} : P) => {
+export const Header = ({title, name, disableOrder, totalCol, type, hasImage, width : widthProps} : P) => {
   const label = useMemo(()=>title ?? name, [title, name]);
 
   // @ts-ignore
@@ -69,7 +69,7 @@ export const Header = ({title, name, disableOrder, totalCol, type, hasImage} : P
       return `calc((100% / ${totalCol}) - ${120}px )`
     }
     return `calc(100% / ${totalCol})`
-  }, [hasImage, totalCol])
+  }, [hasImage, totalCol, widthProps])
   return (
     <TableCell
       sx={sx}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta } from './type'
 import {Box, Pagination} from "@mui/material";
-import {useCallback} from "react";
+import {useCallback, useMemo} from "react";
 import { useListPage } from './Hoc'
 
 const sx = {
@@ -35,33 +35,44 @@ const paginatorSx = {
   }
 }
 
-export const MetaView = ({ current_page, per_page, total }: Meta) => {
-
+function usePaginationHandler({current_page, total, per_page}:Meta){
   const [, {updateParams}]  = useListPage();
-
   const onPageChange = useCallback( (e: any, page: number)=>{
     updateParams({
       page
     })
-  }, [updateParams])
-
+  }, [updateParams]);
+  const paginatorProps = useMemo(()=>{
+    return {
+      onChange: onPageChange,
+      count: Math.ceil(total / per_page),
+      page: current_page
+    }
+  }, [current_page, total, per_page, onPageChange])
+  return {
+    onPageChange,
+    updateParams,
+    paginatorProps
+  }
+}
+export const MetaPaginator = (props: Meta) => {
+  const { paginatorProps }= usePaginationHandler(props);
+  return (
+    <Pagination sx={paginatorSx} {...paginatorProps as any} />
+  )
+}
+export const MetaView = (props : Meta) => {
+  const {total} = props;
   return (
     <Box sx={sx}>
       {
         total ?
-        <p className='font-poppins'>
-          Total {total} data
-        </p>: null
+          <p className='font-poppins'>
+            Total {total} data
+          </p>: null
       }
       {
-        total ?
-          <Pagination
-            onChange={onPageChange}
-            sx={paginatorSx}
-            count={Math.ceil(total / per_page)}
-            page={current_page}
-
-          /> : null
+        total ? <MetaPaginator {...props} /> : null
       }
     </Box>
   );

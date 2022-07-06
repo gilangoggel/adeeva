@@ -8,6 +8,9 @@ export const DeleteCartDialog = observer( () => {
   const onDialogClose = () => store.setToDelete(null)
   return (
     <Dialog
+      sx={{
+        zIndex:104*100
+      }}
       BackdropProps={{
         sx:{
         }

@@ -5,8 +5,8 @@ import {createContext, useContext} from "react";
 import {ResellerInfo} from "@utils/checkout/types";
 import { shipmentModel } from './shipment-store'
 import {userCartStore} from "@stores/cart-store";
-import { toCamelObject } from '@models/transaction'
 import { transactionModel as __transaction } from '@models/transaction-extended'
+import { intersection, map } from 'lodash'
 
 export type { ShipmentFieldName } from './shipment-store'
 
@@ -53,8 +53,15 @@ export const checkoutPageStore = model({
   get resellerData(){
     return self.shipment.resellerData
   },
-  get resellers(){
-    return Array.from(this.resellerData.values()) as unknown as ResellerStore[]
+  resellers(products: any[],cityId : any = null){
+    const data = Array.from(this.resellerData.values()) as unknown as ResellerStore[];
+    const ids = map(products, 'id') as unknown as number[];
+    return data.filter(item=>{
+      const productIds = map(item.products, 'product_id') as number[];
+      const hasAll = intersection(productIds, ids);
+      const base = hasAll.length === products.length;
+      return cityId ? (cityId.toString() as any) === item.cityId.toString() && base : base
+    })
   },
   get selected(){
     const val = self.shipment.selectedReseller;

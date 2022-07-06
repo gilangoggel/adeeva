@@ -3,16 +3,17 @@ import {formatMoney} from "@utils/format-money";
 import {AddShoppingCart, FavoriteBorder, ShoppingBag} from "@mui/icons-material";
 import { motion } from 'framer-motion'
 import {useProduct} from "@root/provider/product-utils-provider";
+import {useSnackbar} from "notistack";
+import {observer} from "mobx-react";
 
 
 export const CardItem = () => {
-  const [,{ navigateToProduct } ] = useProduct();
 
   return (
     <Grid sm={12} xs={12} item md={4} lg={4} sx={sx} >
       <motion.div {...animation} className="container">
         <div className="wrap">
-          <div onClick={navigateToProduct}>
+          <div>
             <Header />
           </div>
           <Control/>
@@ -60,7 +61,7 @@ const controlSx = {
   }
 }
 
-export const Control = () => {
+export const Control = observer( () => {
   const [{name, price} , {addToCart} ] = useProduct();
   return (
     <Box sx={controlSx} className="control">
@@ -79,7 +80,7 @@ export const Control = () => {
       </Tooltip>
     </Box>
   )
-}
+})
 
 const topSx = {
   display: 'flex',
@@ -100,35 +101,40 @@ const topSx = {
   }
 }
 
-const Top = () => {
-  const [{ price } ] = useProduct();
+const Top = observer( () => {
+  const [{ price }, {addToWishlist, isWishlistDisabled} ] = useProduct();
+  const { enqueueSnackbar } = useSnackbar()
+  const handler = () => {
+    enqueueSnackbar('Produk di tambahkan ke wishlist')
+    addToWishlist();
+  }
+  const isDisabled = isWishlistDisabled();
+  const text = ! isDisabled ? 'Tambahkan ke wishlist' : "Produk ada di wishlist anda";
   return (
     <Box sx={topSx} className='font-poppins'>
       <p className='price'>
         Rp {formatMoney(price / 1000)} k
       </p>
-      <Tooltip title='Tambahkan ke wishlist'>
-        <IconButton>
+      <Tooltip title={text}>
+        <span>
+          <IconButton disabled={isWishlistDisabled()} onClick={handler}>
           <FavoriteBorder/>
         </IconButton>
+        </span>
       </Tooltip>
     </Box>
   )
-}
+})
 
 const Header = () => {
   const [{image, name} ] = useProduct();
+  const [,{ navigateToProduct } ] = useProduct();
   return (
     <>
       <Top/>
-      <div className='img' style={{
+      <div className='img' onClick={navigateToProduct} style={{
         backgroundImage:`url(${image})`
       }}/>
-      <div className='font-poppins content'>
-        {/*<h5>*/}
-        {/*  {name}*/}
-        {/*</h5>*/}
-      </div>
     </>
   )
 }

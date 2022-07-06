@@ -8,10 +8,15 @@ import {usePage} from "@inertiajs/inertia-react";
 
 const SellerSelector = observer(()=>{
   const store = useCheckoutPage();
+  const carts = useCart()
   const handleChange = (e: any) => {
     const v = e.target.value;
     store.updateSelected(v);
   }
+  const resellers = store.resellers(
+    carts.items,
+    // store.shipment.formData.cityId
+  )
   return (
     <TextField
       onChange={handleChange}
@@ -30,9 +35,9 @@ const SellerSelector = observer(()=>{
         Adeeva
       </MenuItem>
       {
-        store.resellers.map(item=>(
+        resellers.map(item=>(
           <MenuItem key={item.id} value={item.id}>
-            {item.name}
+            {item.name} | {item.city}
           </MenuItem>
         ))
       }

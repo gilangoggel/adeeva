@@ -44,7 +44,7 @@ export const Header = () => {
   const { tab } = usePage().props.query as Record<string, any>
   useEffect(()=>{
     if (! tab){
-      Inertia.get("/account?tab=profile")
+      Inertia.get("/account?tab=contact")
     }
   }, [tab])
 

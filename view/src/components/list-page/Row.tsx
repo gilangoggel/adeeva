@@ -30,7 +30,7 @@ type CellProps = {
 }
 
 const Cell = ({column, data}: CellProps) => {
-  const { type = "text" } = column;
+  const { type = "text", width } = column;
   const Child = colMap[type];
   const sx = useMemo(()=>{
     if (type === 'image'){
@@ -40,9 +40,11 @@ const Cell = ({column, data}: CellProps) => {
       }
     }
     return {
-      height: 30
+      height: 30,
+      width: width ?? undefined
     }
-  }, [type])
+  }, [type, width])
+  console.log(width)
   return (
     <TableCell sx={sx} className='cell' component='div'>
       <Child config={column} entity={data}/>

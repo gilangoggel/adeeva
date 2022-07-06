@@ -4,6 +4,7 @@ import { loadPage as resolve } from './scripts/load-page'
 import { GlobarStoreProvider } from './provider/globar-store-provider'
 import { SnackbarProvider } from 'notistack'
 import './main.scss'
+import 'rsuite/styles/index.less';
 import axios from "axios";
 
 axios.defaults.withCredentials = true;

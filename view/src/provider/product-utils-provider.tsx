@@ -4,8 +4,9 @@ import voca from 'voca'
 import { userCartStore } from '@stores/cart-store'
 
 
-type Actions = Record<'navigateToProduct'| 'addToWishlist' | 'addToCart', ()=>void> & {
+type Actions = Record<'navigateToProduct'| 'addToWishlist' | 'addToCart' | 'moveToCart', ()=>void> & {
   addToChartWithAmount(n: number) : void
+  isWishlistDisabled() : boolean
 }
 
 type UseProduct = [IProduct, Actions]
@@ -21,8 +22,21 @@ export class ProductUtilsProvider extends React.Component<IProduct> {
     return Inertia.get(`/product/${query}`)
   }
   onAddToWishlist = () => {
-    console.log('todo add to wishlist')
+    userCartStore.push(this.props, 1, true)
   }
+  isWishlistDisabled = () => {
+    const find = userCartStore.items.find(item=>item.id === this.props.id);
+    const wishlist = userCartStore.wishlists.find(item=>item.id === this.props.id);
+    return Boolean(find || wishlist)
+  }
+  moveTocart(){
+    const wishlist = userCartStore.wishlists.find(item=>item.id === this.props.id);
+    if (wishlist){
+      wishlist.moveToChart()
+    }
+  }
+
+
   onAddToCart = () => {
     userCartStore.push(this.props, 1)
   }
@@ -35,9 +49,12 @@ export class ProductUtilsProvider extends React.Component<IProduct> {
       addToCart: this.onAddToCart,
       addToWishlist: this.onAddToWishlist,
       navigateToProduct: this.navigateToProduct,
-      addToChartWithAmount: this.onAddToChartWithN
+      addToChartWithAmount: this.onAddToChartWithN,
+      isWishlistDisabled: this.isWishlistDisabled,
+      moveToCart:this.moveTocart
     }
   ]
+
   render() {
     return (
       <ProductContext.Provider value={this.getContext()}>

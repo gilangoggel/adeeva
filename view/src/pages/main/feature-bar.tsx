@@ -1,5 +1,6 @@
 import {Box, Grid, Container} from "@mui/material";
 import {HeaderSpacer} from "@components/header-spacer";
+import { Inertia } from '@inertiajs/inertia'
 
 const sx = {
   py: 4,
@@ -7,6 +8,11 @@ const sx = {
     fontWeight:"light"
   },
   "& .item":{
+    '&:hover  .mask':{
+      boxShadow:5,
+      bgcolor:'rgba(0,0,0,0.50)',
+    },
+    cursor: "pointer",
     "& p":{
       fontSize:"2rem",
       color:'white'
@@ -19,6 +25,9 @@ const sx = {
       width :'100%',
       bgcolor:'rgba(0,0,0,0.14)',
       zIndex: 1,
+      borderRadius:3,
+      cursor:"pointer",
+      transition: "all ease 0.5s",
     },
     "& .container":{
       "& .content":{
@@ -31,18 +40,8 @@ const sx = {
       backgroundSize:"cover",
       backgroundPosition:"center",
       position: 'relative',
+      borderRadius:3
     },
-    // color: "white",
-    // pt: 3,
-    // pb:2,
-    // transition: "all ease-in-out .3s",
-    // cursor: "pointer",
-    // "&:hover":{
-    //   borderRadius:3,
-    //   bgcolor:'white',
-    //   color: "primary.dark",
-    //   boxShadow:5
-    // }
   }
 }
 
@@ -62,8 +61,19 @@ const CategoryBar = [
 ];
 
 const Item = ({value, label}: any) => {
+
+  const onClick = () => {
+    Inertia.get('/search', {category: value})
+  }
+
   return (
-    <Grid className='item' item xs={12} md={4} sx={{
+    <Grid
+      onClick={onClick}
+      className='item'
+      item
+      xs={12}
+      md={4}
+      sx={{
       textAlign:'center',
     }}>
       <div

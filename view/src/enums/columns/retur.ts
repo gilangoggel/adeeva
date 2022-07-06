@@ -1,6 +1,8 @@
 import {Column} from "@components/list-page";
+import { idColumn } from './id-colum'
 
 const config: Column<any>[] =[
+  idColumn,
   {
     key: "customer.name",
     title: "Customer"

@@ -36,7 +36,7 @@ class Node extends React.Component<Props, State> {
   }
 
   getContentHeight = () => {
-    return layoutStore.get100Vh() - this.state.headerHeight;
+    return layoutStore.get100Vh() - (this.state.headerHeight );
   }
 
   setHeaderHeight = () => {
@@ -53,6 +53,12 @@ class Node extends React.Component<Props, State> {
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.setHeaderHeight)
+  }
+
+  get mainHeaderHeight(){
+    const el = document.getElementById('main-header');
+    if (el) return el.getBoundingClientRect().height;
+    return 0
   }
 
   renderHeader = () => {
@@ -116,9 +122,12 @@ class Node extends React.Component<Props, State> {
 
   renderDesktop = () => {
     const { sidebarContent : Sidebar, info : Info } = this.props;
-    (this.getContentHeight())
+
     return (
-      <Box sx={desktopSx}>
+      <Box sx={desktopSx} style={{
+        marginTop: this.mainHeaderHeight,
+        height: `calc(100vh - ${this.mainHeaderHeight}px)`,
+      }}>
         {this.renderHeader()}
         <Grid container>
           <Grid className='sidebar' item md={3} lg={2}>
@@ -145,9 +154,9 @@ class Node extends React.Component<Props, State> {
     const { isSm } = this.props
     return (
       <Context.Provider value={this.getContext()}>
-        <div>
+        <>
           {isSm ? this.renderMobile() : this.renderDesktop()}
-        </div>
+        </>
       </Context.Provider>
     );
   };
@@ -155,6 +164,11 @@ class Node extends React.Component<Props, State> {
 
 export const Layout = observer(Node);
 const desktopSx = {
+  position: "absolute",
+  top: 0,
+  left:0,
+  width: "100%",
+  overflow:"hidden",
   '& .sidebar':{
     "& .wrapper":{
       px: 1,

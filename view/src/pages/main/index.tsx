@@ -40,7 +40,7 @@ const Home = observer( ({highlight = true}) => {
           : null
       }
       <Container sx={{my:10, textAlign:'center'}}>
-        <h1>Deskripsi adeva</h1>
+        {/*<h1>Deskripsi adeva</h1>*/}
       </Container>
       <Recomendations/>
     </PublicContext.Provider>

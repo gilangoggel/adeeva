@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ListPageProps } from './type'
-import { Table, TableContainer, TableHead, Paper, TableBody, Box, Typography, TableRow,TableCell } from '@mui/material'
+import { Table, TableContainer, TableHead, Paper, TableBody, Box, Typography, TableFooter, TableRow, TableCell } from '@mui/material'
 import { Header } from './header'
 import { Row } from './Row'
 import { Hoc } from './Hoc'
 import {memo, useMemo} from "react";
-import { MetaView } from './meta-view'
+import { MetaView, MetaPaginator } from './meta-view'
 import {MoreVert} from "@mui/icons-material";
 import { ContextMenu } from './context-menu'
 import { motion } from 'framer-motion'
@@ -104,10 +104,15 @@ export const ListPage = (props : ListPageProps<any>) => {
                     Data tidak di temukan
                   </Typography>
                 </Box> : (
-                  <Table component='div'>
-                    <Head columns={columns}/>
-                    <Body data={data} columns={columns}/>
-                  </Table>
+                  <>
+                    <Table component='div'>
+                      <Head columns={columns}/>
+                      <Body data={data} columns={columns}/>
+                    </Table>
+                    <Box sx={{px:2, py :1, display: 'flex', justifyContent:"flex-end"}}>
+                      <MetaPaginator {...meta} />
+                    </Box>
+                  </>
                 )
             }
           </TableContainer>

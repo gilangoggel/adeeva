@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { viteCommonjs, esbuildCommonjs } from '@originjs/vite-plugin-commonjs';
 
 export default defineConfig(( ) => ({
 	build: {
@@ -12,7 +13,18 @@ export default defineConfig(( ) => ({
 		}
 	},
 	plugins: [
+		viteCommonjs(),
 		tsconfigPaths(),
-		react()
-	]
+		react(),
+	],
+	define:{
+		global:{}
+	},
+	optimizeDeps:{
+		esbuildOptions:{
+			plugins:[
+				esbuildCommonjs(['react-dates'])
+			]
+		}
+	}
 }))

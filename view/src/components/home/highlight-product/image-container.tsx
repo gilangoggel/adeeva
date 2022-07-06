@@ -1,6 +1,8 @@
 import {Button, Grid, Divider} from "@mui/material";
 import {formatMoney} from "@utils/format-money";
 import { motion } from 'framer-motion'
+import { Inertia } from "@inertiajs/inertia"
+import voca from "voca";
 
 type P = IProduct & {
   left: boolean
@@ -30,8 +32,13 @@ const makeAnimation = (left: boolean) => {
 }
 
 export const ImageContainer = ({image, name, price, left}: P) => {
+
+  const handleClick = () => {
+    const query = voca(name).replaceAll(" ", "_")
+    return Inertia.get(`/product/${query}`)  }
+
   return (
-    <Grid component={motion.div} {...makeAnimation(left)} item xs={6} sx={sx as any} md={6}>
+    <Grid onClick={handleClick} component={motion.div} {...makeAnimation(left)} item xs={6} sx={sx as any} md={6}>
       <div className="img-container">
         <div
           style={{

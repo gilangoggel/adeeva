@@ -50,9 +50,17 @@ class AuthController {
         return response.redirect().toPath('/sign-in')
       })
   }
-  public logout = async ({ auth, response }: HttpContextContract) => {
+  public logout = async ({ auth }: HttpContextContract) => {
+    await auth.authenticate();
+    if (! auth.user){
+      return {
+        status: false
+      }
+    }
     await auth.logout()
-    return response.redirect().toPath('/')
+    return {
+      status: true
+    }
   }
   public signup = ({inertia, auth, response}: HttpContextContract) => {
     if (auth.user){

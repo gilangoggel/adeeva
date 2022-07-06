@@ -3,6 +3,7 @@ import { Logo } from './logo'
 import { CategoryMenu } from './category-menu'
 import { UserControl } from './user-control'
 import { forwardRef } from 'react'
+import { useAppHeader, AppHeaderContext } from '../contexts/use-app-header'
 
 const sx = {
   position: 'fixed',
@@ -20,15 +21,18 @@ const sx = {
 }
 
 export const Header = forwardRef(({}, ref)=>{
+  const context = useAppHeader();
   return (
-    <Box ref={ref} sx={sx}>
-      <Container>
-        <div>
-          <CategoryMenu/>
-          <UserControl />
-          <Logo/>
-        </div>
-      </Container>
-    </Box>
+    <AppHeaderContext.Provider value={context}>
+      <Box ref={ref} sx={sx}>
+        <Container sx={{px: [0]}}>
+          <div>
+            <CategoryMenu/>
+            <UserControl />
+            <Logo/>
+          </div>
+        </Container>
+      </Box>
+    </AppHeaderContext.Provider>
   )
 });

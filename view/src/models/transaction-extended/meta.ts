@@ -37,7 +37,7 @@ const transactionStatusType = types.enumeration([
 ])
 
 export const metaModel = model({
-  aquirer:string,
+  aquirer:maybeNull(string),
   actions: array(actionModel),
   bill_key: maybeNull(string),
   biller_code: maybeNull(string),

@@ -7,8 +7,9 @@ export const qtyFormSx = {
       display: 'flex',
       justifyContent: "center",
       alignItems: 'center',
-      bgcolor:'primary.main',
-      color:'white'
+      bgcolor:'white',
+      border: "solid 1px",
+      borderColor: "secondary.main"
     },
     '& .btn':{
       width: "40%",
@@ -22,7 +23,6 @@ export const qtyFormSx = {
     }
   },
   '& .title':{
-    fontWeight:"lighter"
   },
   '& .control':{
     display: 'flex',
@@ -37,12 +37,13 @@ export const qtyFormSx = {
         borderLeft:"none",
         borderBottomLeftRadius:0,
         borderTopLeftRadius:0,
-
       },
+      bgcolor:'secondary.main',
+      color: "white"
     },
     '& .view':{
       border: "solid 1px",
-      borderColor:"primary.light",
+      borderColor:"secondary.light",
       display: 'flex',
       alignItems:'center',
       justifyContent:'center'
