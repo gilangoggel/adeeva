@@ -23,32 +23,20 @@ Inertia.share({
 
   notifications({auth}){
     return auth.authenticate()
-      .then( async (user)=>{
-        console.log(await auth.check())
-        if (! user) return {};
-        const unread = await user.unreadNotifications();
-        const readed = await user.readNotifications();
-        const {chain} = await import('lodash');
-        const format = (item) => {
-          return ({
-            ...item.data,
-            id: item.id,
-            read: item.read,
-            at: item.createdAt.toFormat('y-MM-d'),
-          })
-        }
-        const stacks = [...unread, ...readed].map(format);
-        return chain(stacks).keyBy('id').mapValues().value();
+      .then( async ()=>{
+        return {};
       })
-      .catch((error)=>{
-        console.log(error);
+      .catch(()=>{
         return {};
       })
   },
 
   auth: ( {auth  }) => {
     // await auth.use('web').authenticate().then(console.log).catch(console.log)
-    return auth.authenticate().then((user)=>user).catch(()=>null)
+    return auth.authenticate().then((user)=>{
+      console.log(user);
+      return user;
+    }).catch(()=>null)
   },
   query: async ({params, request })=>({
     ...params,

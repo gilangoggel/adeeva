@@ -7,7 +7,9 @@ import {useAuth} from "@hooks/use-auth";
 import {useCart} from "@stores/cart-store";
 import {PropsWithChildren, ReactElement, ReactNode, useEffect} from "react";
 import {appNotification} from "@stores/app-notification";
-import {usePage} from "@inertiajs/inertia-react";
+import axios  from 'axios'
+import { NotificationMenu, NotificationDrawer } from '../../common/notification'
+import {useToggle} from "@hooks/use-toggle";
 
 const sx = {
   p: 2,
@@ -34,22 +36,40 @@ export const RightContent = observer( () => {
   const cart = useCart();
   const auth = useAuth();
   const unread = appNotification.unreadedCount();
-
-  const { notifications } = usePage().props;
+  const [isNotifDrawerOpen, toggle] = useToggle()
+  const user = useAuth();
 
   useEffect(()=>{
-    console.log('notify',notifications);
-  },[notifications]);
+    if (user && isNotifDrawerOpen){
+      appNotification.clearUnreaded();
+    }
+  },[isNotifDrawerOpen, user]);
 
-
-
+  useEffect(()=>{
+    if (user){
+      axios.get("notifications").then(({data})=> {
+        appNotification.clear();
+        appNotification.setItems(data);
+      })
+    }
+  },[user]);
   return (
     <Box sx={sx}>
-      <BagdeController count={unread}>
-        <IconButton className='hidden-mobile' color='secondary'>
-          <Notifications/>
-        </IconButton>
-      </BagdeController>
+      {
+        user ?
+          <>
+            <BagdeController count={unread}>
+              <IconButton onClick={toggle} className='hidden-mobile' color='secondary'>
+                <Notifications/>
+              </IconButton>
+            </BagdeController>
+            {
+              isNotifDrawerOpen ?
+                <NotificationDrawer onClose={toggle}/> : null
+            }
+            {/*<NotificationMenu target={targetNotification} onClose={closeNotificationMenu} onMoreClick={toggle}/>*/}
+          </> : null
+      }
       <BagdeController count={cart.items.length}>
         <IconButton onClick={handler('cart')} className='hidden-mobile' color='secondary'>
           <ShoppingCart/>

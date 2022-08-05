@@ -11,7 +11,7 @@ import {take} from "lodash";
 import {useToggle} from "@hooks/use-toggle";
 
 
-const NotificationDrawer = ({onClose}: any) => {
+export const NotificationDrawer = ({onClose}: any) => {
   const [ {items} ] = useNotification();
   return <Drawer onClose={onClose} open anchor='right'>
     {
@@ -29,18 +29,51 @@ const NotificationDrawer = ({onClose}: any) => {
   </Drawer>
 }
 
+type NotificationMenuProps = {
+  target: HTMLButtonElement| null
+  onClose() : void
+  onMoreClick(): void
+}
+export const NotificationMenu = ({ target, onClose, onMoreClick }: NotificationMenuProps) => {
+  const stacks = appNotification.items;
+  const items = take(stacks, 5);
+  return (
+    <Menu
+      PaperProps={{
+        sx:{
+          maxWidth:"300px"
+        }
+      }}
+      open={Boolean(target)}
+      onClose={onClose}
+      anchorEl={target}
+    >
+      {
+        ! appNotification.items.length ?
+          <MenuItem>
+            <ListItemText primary='Tidak ada notifikasi'/>
+          </MenuItem>
+          : null
+      }
+      {
+        items.map(item=>(
+          <View close={onClose} store={item} key={item.id} />
+        ))
+      }
+      <MenuItem divider/>
+      {
+        stacks.length > 6 ?
+          <MenuItem onClick={onMoreClick}>
+            <ListItemText primary={`Tampilkan ${stacks.length - 5} notifikasi lainya`}/>
+          </MenuItem> : null
+      }
+    </Menu>
+  )
+}
+
 export const Notification = observer(()=>{
   const [ target, toggle, force ] = useButtonToggle();
-  const [ {items: stacks} ] = useNotification();
-  const items = take(stacks, 5);
   const [openDrawer, toggleDrawer] = useToggle();
-  const {notifications}  = usePage().props;
-
-
-  useEffect(()=>{
-    appNotification.setItems(notifications);
-  },[])
-
   useEffect(()=>{
     if (openDrawer && target){
       force();
@@ -62,27 +95,7 @@ export const Notification = observer(()=>{
         openDrawer ?
           <NotificationDrawer onClose={toggleDrawer}/> : null
       }
-      <Menu open={Boolean(target)} onClose={force} anchorEl={target}>
-        {
-          ! appNotification.items.length ?
-            <MenuItem>
-              <ListItemText primary='Tidak ada notifikasi'/>
-            </MenuItem>
-            : null
-        }
-        {
-          items.map(item=>(
-            <View close={force} store={item} key={item.id} />
-          ))
-        }
-        <MenuItem divider/>
-        {
-          stacks.length > 6 ?
-          <MenuItem onClick={toggleDrawer}>
-            <ListItemText primary={`Tampilkan ${stacks.length - 5} notifikasi lainya`}/>
-          </MenuItem> : null
-        }
-      </Menu>
+      <NotificationMenu target={target} onClose={force} onMoreClick={toggleDrawer}/>
       <Badge color='error' badgeContent={appNotification.unreadedCount()}>
         <IconButton onClick={toggle}>
           <Notifications/>

@@ -13,6 +13,7 @@ export default class ReturController extends BackofficeController<Transaction>{
 
   getBuilder(_: Record<string, any>): ModelQueryBuilderContract<any> {
     return transactionQueries()
+ 
       .whereIn("status", ["6"]);
   }
 

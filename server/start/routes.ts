@@ -44,6 +44,7 @@ Route.group(adminRoute)
 Route.group(resellerRoute)
   .middleware('role:RESELLER')
   .prefix('reseller')
+Route.get('/notifications','auth-controller.notifications');
 Route.get('/auth', ({auth})=>{
   return auth.user
 }).middleware('auth')

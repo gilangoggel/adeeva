@@ -88,6 +88,28 @@ class AuthController {
     });
     return response.redirect().toPath(`/sign-in?register=${validated.email}`)
   }
+
+  public notifications =async ({auth}: HttpContextContract) => {
+    try {
+      const user = await auth.authenticate();
+      const unread = await user.unreadNotifications();
+      const readed = await user.readNotifications();
+      const {chain} = await import('lodash');
+      const format = (item) => {
+        return ({
+          ...item.data,
+          id: item.id,
+          read: item.read,
+          at: item.createdAt.toFormat('y-MM-d'),
+        })
+      }
+      const stacks = [...unread, ...readed].map(format);
+      return chain(stacks).keyBy('id').mapValues().value();
+    }catch (e){
+      return {};
+    }
+  }
+
 }
 
 export default AuthController

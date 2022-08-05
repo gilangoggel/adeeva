@@ -11,7 +11,11 @@ export function computedViews(self: any){
     },
 
     get canBeRetur(){
-      return this.isStatus(TransactionStatus.RECEIVED_TO_CUSTOMER);
+      if([TransactionStatus.RECEIVED_TO_CUSTOMER,TransactionStatus.RETUR ].includes(this.status)){
+        return true;
+      }
+      return false;
+      // return this.isStatus(TransactionStatus.RECEIVED_TO_CUSTOMER);
     },
 
     get invoiceId(){

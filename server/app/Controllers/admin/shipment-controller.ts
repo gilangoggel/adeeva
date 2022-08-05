@@ -27,6 +27,7 @@ export default class ShipmentController extends BackofficeController<Transaction
   getBuilder(queries: Record<string, any>): ModelQueryBuilderContract<any> {
     console.log(queries);
     return transactionQueries()
+    .orderBy("created_at",'desc')
       .whereIn("status", ["2", "3", "4"]);
   }
 
