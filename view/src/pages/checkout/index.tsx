@@ -19,7 +19,7 @@ const sx = {
   '& h1':{
     color:'secondary.light',
     fontWeight:"900"
-  }
+  },
 }
 
 const Header = () => {
@@ -53,7 +53,7 @@ export const Checkout = observer( ({transaction}: any) => {
   return (
     <Context.Provider value={pageStore}>
       <PageControllerContext.Provider  value={ctx}>
-        <Container>
+        <Container sx={{py:5}}>
           <Header/>
           <Controller />
           <AnimatePresence exitBeforeEnter>

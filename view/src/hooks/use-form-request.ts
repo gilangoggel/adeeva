@@ -7,7 +7,8 @@ type Ref = Record<string, any>
 
 type Config = {
   successMessage: string
-  path: string
+  path: string,
+  method?: "post"| "put"
 }
 
 class ErrorPayload {
@@ -32,7 +33,7 @@ class FormRequest<T> {
 
   response: T | null = null
 
-  constructor(protected path: string = "") {}
+  constructor(protected path: string = "", protected method: "post"| "put" = "post") {}
 
   run = async (data: Ref | FormData ) => {
     if (! (data instanceof FormData)){
@@ -42,7 +43,7 @@ class FormRequest<T> {
       })
       data = form;
     }
-    return axios.post(this.path, data).then(({data})=>{
+    return (axios[this.method])(this.path, data).then(({data})=>{
       this.response = data;
     }).catch(error=>{
       if ('response' in error){
@@ -62,9 +63,9 @@ type UseFormRequest<T> = [
   }
 ]
 
-export function useFormRequest<T extends Ref = Ref>({ path, successMessage }: Config) : UseFormRequest<T> {
+export function useFormRequest<T extends Ref = Ref>({ path, successMessage, method = "post" }: Config) : UseFormRequest<T> {
   const request = useMemo(()=>{
-    return new FormRequest<T>(path)
+    return new FormRequest<T>(path, method)
   }, [path])
   const [ loading, _, {toggleCallback, inline} ] = useToggle()
   const { enqueueSnackbar } = useSnackbar()
@@ -87,9 +88,6 @@ export function useFormRequest<T extends Ref = Ref>({ path, successMessage }: Co
     }
     return ''
   }
-  console.log(
-    request.errorPayload
-  )
   return [request.response, loading, { run, getError, clear
 
   } ]

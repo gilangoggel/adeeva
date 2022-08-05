@@ -125,8 +125,7 @@ class Node extends React.Component<Props, State> {
 
     return (
       <Box sx={desktopSx} style={{
-        marginTop: this.mainHeaderHeight,
-        height: `calc(100vh - ${this.mainHeaderHeight}px)`,
+        // height: `calc(100vh - ${this.mainHeaderHeight}px)`,
       }}>
         {this.renderHeader()}
         <Grid container>
@@ -136,10 +135,10 @@ class Node extends React.Component<Props, State> {
             </div>
           </Grid>
           <Grid item md={9} lg={10} className='content'>
-            <div id='main-wrapper' className='wrapper overlay-scrollbar reverse' style={{height: this.getContentHeight()}}>
+            <Box id='main-wrapper' className='wrapper overlay-scrollbar reverse'>
               <Info/>
               {this.props.children}
-            </div>
+            </Box>
           </Grid>
         </Grid>
       </Box>
@@ -164,7 +163,7 @@ class Node extends React.Component<Props, State> {
 
 export const Layout = observer(Node);
 const desktopSx = {
-  position: "absolute",
+  // position: "absolute",
   top: 0,
   left:0,
   width: "100%",

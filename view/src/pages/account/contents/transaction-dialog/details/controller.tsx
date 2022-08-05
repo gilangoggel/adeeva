@@ -2,7 +2,8 @@ import { CheckPaymentStatus } from '@components/transaction/extended/check-payme
 import {Button, Box} from "@mui/material";
 import {useSnackbar} from "notistack";
 import { useTransactionDialog } from '../context'
-import {ForwardToInbox} from "@mui/icons-material";
+import {ForwardToInbox, Check} from "@mui/icons-material";
+import {ConfirmTransaction} from "@components/transaction/extended/confirm-transaction";
 
 const messageMap = {
   pending: "Kami belum dapat menverifikasi pembayaran anda",
@@ -11,7 +12,7 @@ const messageMap = {
 
 export const Controller = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const [_, toggle ] = useTransactionDialog();
+  const [model, toggle ] = useTransactionDialog();
   const onSuccess = (v: string) =>{
     const m = messageMap[v as keyof typeof messageMap];
     if (m)
@@ -31,6 +32,7 @@ export const Controller = () => {
       </CheckPaymentStatus>
       <Box sx={{p:2}}>
         <Button
+          disabled={! model.canBeRetur}
           startIcon={
             <ForwardToInbox/>
           }
@@ -43,6 +45,25 @@ export const Controller = () => {
           Pengembalian
         </Button>
       </Box>
+      <ConfirmTransaction>
+        {
+          ({handler, isDisabled})=><Box sx={{px:2}}>
+            <Button
+              disabled={isDisabled}
+              onClick={handler}
+              color='secondary'
+              fullWidth
+              variant='contained'
+              sx={{borderRadius:3}}
+              startIcon={
+                <Check/>
+              }
+            >
+              Produk telah sampai
+            </Button>
+          </Box>
+        }
+      </ConfirmTransaction>
     </div>
   );
 };

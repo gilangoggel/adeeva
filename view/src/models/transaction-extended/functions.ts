@@ -24,6 +24,12 @@ export const makeInertiaRequest = ({ method = "post", url, payload = {} }: Inert
   })
 }
 
+export const doUserCompletion = (model: any) => {
+  return makeInertiaRequest({
+    url: `/transaction/${model.id}/complete`,
+    method: "put"
+  })
+}
 
 export const doResellerCompletion = (model: any, message: string) => {
   return makeInertiaRequest({

@@ -10,7 +10,8 @@ const sx = {
   width: "100%",
   top:0,
   left: 0,
-  zIndex: (t: any)=>t.zIndex.appBar * 1,
+  boxShadow:30,
+  zIndex: (t: any)=>t.zIndex.appBar * 5,
   bgcolor: "white",
   "& > div > div":{
     minHeight: 70,

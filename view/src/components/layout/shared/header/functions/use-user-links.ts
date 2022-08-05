@@ -21,7 +21,7 @@ const user : Link[] = [
 ]
 
 const backoffice = (user: any) : Link =>({
-  icon: Apps, to: user.role === "ADMINISTRATOR" ? '/admin/dashboard' :'/backoffice/dashboard', label: 'Backoffice'
+  icon: Apps, to: user.role === "ADMINISTRATOR" ? '/admin/dashboard' :'/reseller/dashboard', label: 'Backoffice'
 })
 
 export function useUserLinks() : Link []{

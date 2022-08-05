@@ -52,6 +52,7 @@ export const transactionModel = model({
       self.status = status;
     },
     update(data : Partial<SnapshotIn<typeof self>>){
+      console.log(data);
       Object.assign(self,data);
     },
   }))

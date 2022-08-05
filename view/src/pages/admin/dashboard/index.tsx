@@ -15,9 +15,10 @@ const Wrap = () => {
   )
 }
 
-export const Dashboard = () => {
+export const Dashboard = ({children}: any) => {
   return (
     <Hoc>
+      {children}
       <Wrap/>
     </Hoc>
   );

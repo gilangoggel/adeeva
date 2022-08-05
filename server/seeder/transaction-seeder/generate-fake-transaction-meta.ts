@@ -18,9 +18,8 @@ export default class GenerateFakeTransactionMeta{
       grossAmount: this.grossAmount,
       merchant_id: 'G553123140',
       payment_type: "bank_transfer",
-      va_numbers: [{"bank":fake.arrayElement(["bca", 'bri']) ,"va_number":
-          voca(fake.creditCardNumber()).replaceAll("-", "")
-      }],
+      va_numbers: [{"bank":fake.arrayElement(["bca", 'bri']) ,
+        "va_number": voca(fake.creditCardNumber()).replaceAll("-", "")}],
       actions: [],
       id: fake.uuid.v4(),
       status: "settlement"

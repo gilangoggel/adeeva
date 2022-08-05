@@ -49,6 +49,7 @@
     "@inertiajs/inertia": "^0.11.0",
     "@inertiajs/inertia-react": "^0.8.0",
     "@types/socket.io": "^3.0.2",
+    "@verful/notifications": "^2.0.2",
     "autodetect-decoder-stream": "^2.0.2",
     "axios": "^0.27.2",
     "cross-fetch": "^3.1.5",

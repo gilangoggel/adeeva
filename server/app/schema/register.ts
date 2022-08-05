@@ -5,5 +5,8 @@ export const registerSchema = schema.create({
     table:"users", column:"email"
   })]),
   password: schema.string([rules.minLength(8), rules.confirmed("passwordConfirmation")]),
-  name: schema.string()
+  name: schema.string(),
+  cityId: schema.string(),
+  address: schema.string(),
+  postalCode: schema.string([rules.regex(/^\d+$/)])
 })

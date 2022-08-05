@@ -1,13 +1,17 @@
 import {getExpeditionImage, getTrackingUrl} from "@models/transaction-extended/functions";
 import {cities} from "@root/enums/cities";
 import {sumBy} from "lodash";
-import { TransactionStatus } from '@root/enums/transaction-status'
+import {TransactionStatus} from '@root/enums/transaction-status'
 
 export function computedViews(self: any){
   return {
 
     isStatus(status : TransactionStatus) : boolean {
       return self.status === status;
+    },
+
+    get canBeRetur(){
+      return this.isStatus(TransactionStatus.RECEIVED_TO_CUSTOMER);
     },
 
     get invoiceId(){

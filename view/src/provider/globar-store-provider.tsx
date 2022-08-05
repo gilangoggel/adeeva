@@ -6,6 +6,7 @@ import axios from "axios";
 import {useToggle} from "@hooks/use-toggle";
 import { AppLoader } from '@components/app-loader'
 import { CheckAuthContext } from './check-auth-provider'
+import {NotificationProvider} from "@root/provider/notification-provider";
 
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
@@ -53,7 +54,9 @@ export const GlobarStoreProvider = observer( ({children,...properties} : any)=> 
   return (
     <GlobalStoreContext.Provider value={memo}>
       <CheckAuthContext.Provider value={checkAuth}>
-        {children}
+        <NotificationProvider {...props}>
+          {children}
+        </NotificationProvider>
         {
           loading ?
             <AppLoader/> : null

@@ -2,6 +2,7 @@ import {AppBar, Toolbar, Box, Container} from '@mui/material'
 import {Inertia} from "@inertiajs/inertia";
 import { UserControl } from '../user/user-control'
 import { Notification } from '../common/notification'
+import {usePage} from "@inertiajs/inertia-react";
 
 const toHome = () => {
   Inertia.get("/")
@@ -14,6 +15,7 @@ const sx = {
 }
 
 export const Header = () => {
+  const { notifications } = usePage().props;
 
   return (
     <AppBar sx={sx} elevation={3}>

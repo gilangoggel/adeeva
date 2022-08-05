@@ -13,6 +13,7 @@ type Data = {
   carts: Record<string, any>[]
 }
 
+
 export default class GenerateFakeTransaction{
 
   constructor(protected user: User) {};

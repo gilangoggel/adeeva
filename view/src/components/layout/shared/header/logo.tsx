@@ -13,7 +13,7 @@ const sx =  {
   color:"secondary.main",
   '& > span':{
     fontSize:"1rem",
-    color: "#909090"
+    color: "secondary.dark"
   }
 }
 const toHome = () => {

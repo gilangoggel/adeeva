@@ -17,6 +17,7 @@ export default class OrderController extends BackofficeController<Transaction>{
   getBuilder(queries: Record<string, any>): ModelQueryBuilderContract<any> {
     console.log(queries)
     return transactionQueries()
+      .orderBy("created_at", 'desc')
       .whereIn("status", ['0','1', '2', "3"]);
   }
 

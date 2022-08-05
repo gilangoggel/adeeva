@@ -3,7 +3,7 @@ import {ITransaction, transactionModel} from "@models/transaction-extended";
 import axios from 'axios'
 
 
-const transactionPageModel = types.model({
+const transactionPageModel = types.model('transactionPageModel',{
   items : types.optional(types.array(
     transactionModel
   ), []),

@@ -17,6 +17,8 @@ export function SignUp() {
 }
 
 const sx = {
+  top: 0,
+  left:0,
   display: "flex",
   "& h1":{
     // fontWeight:"light",
@@ -26,7 +28,6 @@ const sx = {
     fontWeight:"light"
   },
   "& > .form-container":{
-    height: '100vh',
     p: [0,5],
     display: 'flex',
     alignItems:['flex-start','center'],
@@ -35,13 +36,11 @@ const sx = {
     "& > div":{
       width:["100%","80%"],
       p: 2,
-      borderRadius: 3,
-      boxShadow:0
+      borderRadius: 10,
     }
   },
   "& > .illustration-container":{
-    height: '100vh',
-    bgcolor:"primary.dark",
+    // bgcolor:"primary.dark",
     width: '30vw',
     p: 5,
     display: ['none','flex'],

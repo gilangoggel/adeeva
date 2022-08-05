@@ -11,7 +11,12 @@ export const PopperNode = ({ name, children }: PropsWithChildren<Props>) => {
   const [ getAnchor, _, close ] = useHeader()
   const anchor = getAnchor(name)
   return (
-    <Popper anchorEl={ anchor } open={Boolean(anchor)} transition disablePortal>
+    <Popper
+       anchorEl={ anchor }
+       open={Boolean(anchor)}
+       transition
+       disablePortal
+    >
       {
         ({TransitionProps}) => (
           <Fade {...TransitionProps}>
@@ -19,7 +24,7 @@ export const PopperNode = ({ name, children }: PropsWithChildren<Props>) => {
               {
                 ! anchor ? null :
                   <ClickAwayListener onClickAway={close}>
-                    <Paper sx={{p:2, minWidth:300, borderRadius:0}} elevation={3}>
+                    <Paper sx={{p:2, minWidth:300, borderRadius:5}} elevation={2}>
                       {children}
                     </Paper>
                   </ClickAwayListener>

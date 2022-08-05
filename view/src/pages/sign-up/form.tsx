@@ -1,5 +1,6 @@
 import {TextField, Box, Grid, Divider, Button} from "@mui/material";
 import {useFormUtils} from "@hooks/use-form-utils";
+import { CityField } from '@components/fields/city-field'
 
 const sx = {
   "& .field":{
@@ -43,7 +44,10 @@ const initial = {
   email: "",
   password : "",
   passwordConfirmation: "",
-  name: ""
+  name: "",
+  postalCode:"",
+  address: "",
+  cityId:""
 }
 
 export const Form = () => {
@@ -68,6 +72,25 @@ export const Form = () => {
                 </Grid>
               ))
             }
+            <Grid item xs={12} md={6}>
+              <CityField label='Kota' fullWidth {...commonProps} {...fieldUtility('cityId', false)} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                {...commonProps}
+                {...fieldUtility('postalCode')}
+                label='Kode pos'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                {...commonProps}
+                {...fieldUtility('address')}
+                label='Alamat lengkap'
+                multiline
+                rows={5}
+              />
+            </Grid>
             <Grid sx={{mx:"auto"}} item xs={12} md={6}>
               <Button type='submit' fullWidth variant='contained'>
                 Daftar sekarang

@@ -47,7 +47,6 @@ const CartControl = observer(()=>{
 
 const ButtonControl = observer( ()=> {
   const auth = useAuth()
-  console.log(auth);
   return (
     <div className='controls'>
       <Tooltip title='Wishlist'>

@@ -4,12 +4,13 @@ export const rootSx = {
   justifyContent:'center',
   "& > .container":{
     width: ['80%', '60%'],
-    bgcolor:"primary.light",
     boxShadow:3,
     display: "flex",
     p: 2,
     "& > .form-container":{
-      width : ["100%","50%"]
+      width : ["100%","50%"],
+      borderRadius:50,
+      bgcolor:'white'
     },
     '& > .welcome-text':{
 

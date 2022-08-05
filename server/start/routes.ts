@@ -29,6 +29,7 @@ Route.group(()=>{
   Route.post("account/credential", 'account-controller.credential');
   Route.post("transaction/retur/:id", 'shared/retur-controller.store');
   Route.post("transaction/retur/:id/send", 'shared/retur-controller.send');
+  Route.put("transaction/:id/complete", 'user/transaction-controller.complete');
 }).middleware("auth")
 
 Route.get('/sign-in', 'auth-controller.showLogin')

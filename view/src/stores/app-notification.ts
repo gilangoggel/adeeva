@@ -4,32 +4,42 @@ import { notificationModel } from '@models/notification'
 // const ws = io();
 
 const appNotificationModel = types.model({
-  items: types.optional(types.array(notificationModel), [])
-}).actions(self=>({
-  push(data: any){
-    if (notificationModel.is(data)){
-      self.items.push(data);
+  notifications: types.optional(types.map(notificationModel), {}),
+})
+  .views(self=>({
+    get items(){
+      return Array.from(self.notifications.values());
+    },
+    unreadedCount(){
+      return this.items.filter(item=>!item.read).length
+    },
+    makeAllUnreaded(userid: any){
+      this.items.forEach(item=>{
+        item.markAsReaded()
+      });
+      if (userid){
+        // ws.emit('clear-notifications', {
+        //   user_id: userid
+        // });
+      }
     }
-  },
-
-  clearUnreaded(){
-    self.items.forEach(i=> {
-      i.markAsReaded()
-    })
-  },
-})).views(self=>({
-  unreadedCount(){
-    return self.items.filter(item=>!item.readed).length
-  },
-  makeAllUnreaded(userid: any){
-    self.items.forEach(item=>{
-      item.markAsReaded()
-    });
-    if (userid){
-      // ws.emit('clear-notifications', {
-      //   user_id: userid
-      // });
-    }
-  }
-}))
+  })).actions(self=>({
+    push(data: any){
+      if (notificationModel.is(data)){
+        // self.items.push(data);
+      }
+    },
+    clear(){
+      self.notifications.clear();
+    },
+    setItems(items: any){
+      console.log('notifications');
+      self.notifications.merge(items);
+    },
+    clearUnreaded(){
+      self.items.forEach(i=> {
+        i.markAsReaded()
+      })
+    },
+  }))
 export const appNotification = appNotificationModel.create({});

@@ -35,8 +35,8 @@
       "@adonisjs/lucid",
       "@adonisjs/auth",
       "@eidellev/inertia-adonisjs",
-      "xendit-node"
-    ],
-  },
-
+      "xendit-node",
+      "@verful/notifications"
+    ]
+  }
 }

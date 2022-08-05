@@ -4,7 +4,8 @@
     "./commands",
     "@adonisjs/core/build/commands/index.js",
     "@adonisjs/repl/build/commands",
-    "@adonisjs/lucid/build/commands"
+    "@adonisjs/lucid/build/commands",
+    "@verful/notifications/build/commands"
   ],
   "namespaces": {
     "httpControllers": "App/Controllers"
@@ -30,7 +31,8 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@eidellev/inertia-adonisjs",
-    "./providers/socket-io-provider"
+    "./providers/socket-io-provider",
+    "@verful/notifications"
   ],
   "metaFiles": [
     {

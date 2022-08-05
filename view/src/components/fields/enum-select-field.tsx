@@ -75,7 +75,7 @@ class EnumSelectField extends PureComponent<ComponentProps, State> {
     const { selected : val } = this.state;
     const { options, ...props } = this.props
     return (
-      <TextField {...props} select onChange={this.handleChange as any} value={val}>
+      <TextField {...props}  select onChange={this.handleChange as any} value={val}>
         {
           this.getAvailableOptions().map((item)=>(
             <MenuItem disabled={item.value === "__disabled"} value={item.value} key={item.value}>

@@ -7,9 +7,6 @@ export default class OrderController extends BaseController{
   getType(): "completed" | "order" | "retur" | "shipment" {
     return 'order';
   }
-
-
-
   update = async ({ params, inertia, auth }: HttpContextContract) => {
     const model = await Transaction.find(
       params.id

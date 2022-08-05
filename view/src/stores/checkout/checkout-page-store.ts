@@ -85,9 +85,11 @@ export const checkoutPageStore = model({
     }
     self.shipment.setSeletedReseller(id);
   }
-  const setTransaction = (obj: Record<string, any>) => {
+  const setTransaction = (obj?: Record<string, any> | null) => {
     if (__transaction.is(obj)){
       self.transaction = obj as any;
+    }else{
+      self.transaction = null;
     }
   }
   const setLoading = (v: boolean) => {

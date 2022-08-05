@@ -11,7 +11,9 @@ export abstract class BaseController {
     const map : Record<ReturnType<BaseController['getType']>, string[]> = {
       completed: [],
       order: ["2","3"],
-      retur: [],
+      retur: [
+        "6"
+      ],
       shipment: [
         "3", "4", "5"
       ]

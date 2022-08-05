@@ -44,7 +44,6 @@ const Cell = ({column, data}: CellProps) => {
       width: width ?? undefined
     }
   }, [type, width])
-  console.log(width)
   return (
     <TableCell sx={sx} className='cell' component='div'>
       <Child config={column} entity={data}/>

@@ -10,6 +10,7 @@ type Props = {
 }
 
 const sx = {
+  py:5,
   '& h3':{
     color:'#6c6c6c',
     pt:2,

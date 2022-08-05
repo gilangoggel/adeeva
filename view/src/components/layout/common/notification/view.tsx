@@ -15,16 +15,10 @@ export const View = ({ store, close }: Props) => {
 
   const handler = () => {
     close()
-    if (store.action_link){
-      return Inertia.get(store.action_link,{},{
-        preserveState: true,
-        preserveScroll: true
-      })
-    }
   }
   return (
     <MenuItem onClick={handler}>
-      <ListItemText primary={store.text} secondary={moment(store.created_at).format("DD MMMM Y")}/>
+      <ListItemText primary={store.text} secondary={store.date}/>
       <Notifications sx={{ml:2, color:'info.main'}}/>
     </MenuItem>
   );

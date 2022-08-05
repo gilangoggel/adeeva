@@ -20,6 +20,8 @@ import {TrackingListeners} from "App/Helper/tracking-listeners";
 import {TransactionStatus} from "App/Enums/payment-status";
 import { OrderCreated } from 'App/Notification/order-created'
 import TransactionRetur from "App/Models/TransactionRetur";
+import TransactionOrderIsSending from "App/Notifications/TransactionOrderIsSending";
+import TransactionOrderIsReceived from "App/Notifications/TransactionOrderIsReceived";
 
 export default class Transaction extends BaseModel {
   /**
@@ -136,6 +138,34 @@ export default class Transaction extends BaseModel {
 
   @afterCreate()
   static OnCreated = OrderCreated.run;
+
+  @beforeSave()
+  static onTransactionCompleted = async (self: Transaction) => {
+    if(self.resellerId && self.$dirty['status'] && self.$dirty['status'] == TransactionStatus.COMPLETED){
+      await self.load("customer");
+      await self.load("reseller", p=>p.preload('user'));
+      await Reseller.increaseResellerBalance(self);
+    }
+  }
+
+  @beforeSave()
+  static onConfirmedByReseller = async (self: Transaction) => {
+    if(self.resellerId && self.$dirty['status'] && self.$dirty['status'] == TransactionStatus.SENDING){
+      await self.load("customer");
+      await self.load("reseller", p=>p.preload('user'));
+      const { customer } = self;
+      customer.notify(new TransactionOrderIsSending(self));
+    }
+  }
+  @beforeSave()
+  static onTransactionCompletedByReseller = async (self: Transaction) => {
+    if(self.resellerId && self.$dirty['status'] && self.$dirty['status'] == TransactionStatus.RECEIVED_TO_CUSTOMER){
+      await self.load("customer");
+      await self.load("reseller", p=>p.preload('user'));
+      const { customer } = self;
+      customer.notify(new TransactionOrderIsReceived(self));
+    }
+  }
 
   @beforeSave()
   public static whenPaymentUpdated = async (self: Transaction) => {

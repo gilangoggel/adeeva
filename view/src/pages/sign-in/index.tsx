@@ -22,7 +22,7 @@ const sx = {
     height: "50%"
   },
   "& h1":{
-    color:'primary.main',
+    color:'secondary.main',
     textAlign:'center',
     mt: 3,
     fontWeight:"bolder",
@@ -32,12 +32,13 @@ const sx = {
     width: ['100%',"50%"],
     display: 'flex',
     alignItems: 'center',
-    bgcolor:"primary.main",
     justifyContent: "center",
     "& > div":{
       width: "50%",
       bgcolor:"white",
       p: 10,
+      borderRadius:5,
+      boxShadow:10
       // flex: 1,
     }
   }

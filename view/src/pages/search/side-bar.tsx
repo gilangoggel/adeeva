@@ -74,7 +74,7 @@ const PriceFilter = () => {
 export const SideBar = () => {
 
   return (
-    <div>
+    <div style={{position: "sticky", top: 0, left: 0}}>
       <FilterContainer title='Harga'>
         <PriceFilter/>
       </FilterContainer>

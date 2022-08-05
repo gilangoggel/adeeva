@@ -6,9 +6,9 @@ import { chain } from 'lodash'
 export default class AdminController {
   index = async (context: HttpContextContract) => {
     const { inertia } = context;
-    const monthly = TransactionQuery.makeMonthlyQuery();
-    const daily = TransactionQuery.makeDailyQuery();
-    const topSales = chain(await topProductQuery()).orderBy('count').take(5).value() ;
+    const monthly = TransactionQuery.makeMonthlyQuery(context);
+    const daily = TransactionQuery.makeDailyQuery(context);
+    const topSales = chain(await topProductQuery(context)).orderBy('count').take(5).value();
     return inertia.render('admin.dashboard', {
       monthly,
       daily,

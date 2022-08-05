@@ -3,6 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { registerSchema } from 'App/schema/register'
 import User from "App/Models/User";
 import Hash from "@ioc:Adonis/Core/Hash";
+import Profile from "App/Models/Profile";
 
 const loginSchema = schema.create({
   email: schema.string({}, [
@@ -71,12 +72,20 @@ class AuthController {
   public register = async ({ request, response }: HttpContextContract) =>{
     const validated = await request.validate({
       schema: registerSchema
-    })
-     await User.create({
-      ...validated,
+    });
+    const { password, name, email, cityId, postalCode, address } = validated;
+    const user = await User.create({
+      name,
+      email,
       role: "USER",
-      password: await Hash.make(validated.password)
-    })
+      password: await Hash.make(password)
+    });
+    await Profile.create({
+      userId: user.id,
+      cityId: cityId as any,
+      postalCode,
+      address
+    });
     return response.redirect().toPath(`/sign-in?register=${validated.email}`)
   }
 }

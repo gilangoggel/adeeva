@@ -6,7 +6,7 @@ const { maybeNull,model, string, identifier, enumeration, number, array, optiona
 export enum PaymentType{
   TRANSFER = 'bank_transfer',
   GOPAY = 'gopay',
-  SHOPEE = 'shopee',
+  SHOPEE = 'shopeepay',
   ECHANNEL = 'echannel'
 }
 export enum MetaTransactionStatus{

@@ -2,12 +2,17 @@ import {ITransaction} from "@models/transaction-extended";
 import {Box, Button} from "@mui/material";
 import { CheckCircle } from '@mui/icons-material'
 import { Inertia } from '@inertiajs/inertia'
+import {useCheckoutPage} from "@stores/checkout";
 
 export const SettledInfo = ({transaction}: {transaction: ITransaction}) => {
+  const checkout = useCheckoutPage();
   const onClick = () => {
     Inertia.get(`/account?tab=transaction&transaction=${transaction.id}`,{},{
-      preserveState:true
-    })
+      preserveState:false,
+      onSuccess(){
+        checkout.setTransaction(null);
+      }
+    });
   }
   return (
     <Box

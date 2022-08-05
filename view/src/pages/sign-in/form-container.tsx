@@ -13,12 +13,13 @@ const initial = {
 
 const sx = {
   "& h2":{
-    color:"primary.main",
+    color:"secondary.main",
     mb: 4
   },
   "& .field-container":{
     mb: 4
-  }
+  },
+  borderRadius:50,
 }
 
 export const FormContainer = () => {
@@ -48,10 +49,10 @@ export const FormContainer = () => {
         <TextField {...fieldUtility('password', true)} type='password' fullWidth size='small' variant='filled' label='Password' />
       </div>
       <div className="field-container">
-        <Button className='font-poppins' type='submit' fullWidth variant='contained'>
+        <Button color='secondary' className='font-poppins' type='submit' fullWidth variant='contained'>
           Log in
         </Button>
-        <Button onClick={toSignUp} sx={{mt: 2, textTransform:"none"}} className='font-poppins' fullWidth variant='contained'>
+        <Button color='secondary' onClick={toSignUp} sx={{mt: 2, textTransform:"none"}} className='font-poppins' fullWidth variant='contained'>
           Klik disini untuk mendaftar ?
         </Button>
       </div>

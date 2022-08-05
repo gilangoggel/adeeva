@@ -3,6 +3,8 @@ import {BaseModel, column, BelongsTo, belongsTo, computed, HasMany, hasMany} fro
 import User from './User'
 import { cities } from 'App/Enums/cities'
 import ResellerProduct from "App/Models/ResellerProduct";
+import Transaction from "App/Models/Transaction";
+import ResellerBalanceUpdated from "App/Notifications/ResellerBalanceUpdated";
 
 export default class Reseller extends BaseModel {
   /**
@@ -44,4 +46,25 @@ export default class Reseller extends BaseModel {
    */
   @hasMany(() => ResellerProduct)
   public productList: HasMany<typeof ResellerProduct>
+
+
+  static increaseResellerBalance = async (transaction : Transaction) => {
+    if (transaction.resellerId){
+      await transaction.load("reseller", (p)=>p.preload("user"));
+      const { reseller } = transaction;
+      reseller.balance += transaction.total;
+      await reseller.save();
+      reseller.user.notify(new ResellerBalanceUpdated(transaction));
+    }
+  }
+  static decreaseResellerBalance = async ( transaction : Transaction) => {
+    if (transaction.resellerId){
+      await transaction.load("reseller", (p)=>p.preload("user"));
+      const { reseller } = transaction;
+      reseller.balance -= transaction.total;
+      await reseller.save();
+      reseller.user.notify(new ResellerBalanceUpdated(transaction, true));
+    }
+  }
+
 }

@@ -1,4 +1,11 @@
-import {doAdminCompletion,doResellerConfirm, pushTracking, doResellerCompletion, checkPaymentStatus} from "./functions";
+import {
+  doAdminCompletion,
+  doResellerConfirm,
+  pushTracking,
+  doResellerCompletion,
+  checkPaymentStatus,
+  doUserCompletion
+} from "./functions";
 
 export function requestViews(self: any){
   return {
@@ -7,6 +14,9 @@ export function requestViews(self: any){
     },
     doResellerCompletion(message: string){
       return doResellerCompletion(self, message)
+    },
+    doCustomerCompletion(){
+      return doUserCompletion(self);
     },
     doResellerConfirm(){
       return doResellerConfirm(self)

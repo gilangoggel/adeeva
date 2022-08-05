@@ -18,7 +18,7 @@ export const List = (props: any) => {
       <>
         <ListPage
           filter={Filter}
-          title='Data Reseller'
+          title='Data pengguna'
           columns={config}
           onAction={console.log}
           {...props.paginator as any}

@@ -3,10 +3,11 @@ import {BaseModel, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/L
 import Profile from "App/Models/Profile";
 import Transaction from "App/Models/Transaction";
 import Reseller from "App/Models/Reseller";
-import Notification from "App/Models/Notification";
 import Comment from "App/Models/Comment";
+import {compose} from "@poppinss/utils/build/src/Helpers";
+import {Notifiable} from "@ioc:Verful/Notification/Mixins";
 
-export default class User extends BaseModel {
+export default class User extends compose(BaseModel, Notifiable('user_notifications')) {
   @column({ isPrimary: true })
   public id: number
 
@@ -45,8 +46,7 @@ export default class User extends BaseModel {
 
   @hasOne(()=>Reseller)
   public reseller: HasOne<typeof Reseller>
-  @hasMany(()=>Notification)
-  public notifications : HasMany<typeof Notification>
+
   @hasMany(()=>Comment)
   public comments : HasMany<typeof Comment>
 

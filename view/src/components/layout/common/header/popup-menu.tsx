@@ -10,7 +10,10 @@ export const PopupMenu = ({anchor, handleClose, children} : PropsWithChildren<Pr
   return (
     <Menu
       PaperProps={{
-        elevation: 1
+        elevation: 10,
+        sx:{
+          borderRadius:10,
+        }
       }}
       disableScrollLock
       anchorOrigin={{

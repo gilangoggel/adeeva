@@ -3,10 +3,22 @@ import ResellerProduct from "App/Models/ResellerProduct";
 import Reseller from "App/Models/Reseller";
 import { checkTransactionStatus } from '../utility/check-transaction-status'
 import {transactionQueries} from "App/Helper/transaction-functions";
+import Transaction from "App/Models/Transaction";
+import {TransactionStatus} from "App/Enums/payment-status";
 
 export default class TransactionController{
 
   status = checkTransactionStatus
+
+  complete = async  ({params : {id}} : HttpContextContract ) => {
+    const transaction = await Transaction.find(id);
+    if(transaction){
+      transaction.setCompletions('customer');
+      transaction.status = TransactionStatus.COMPLETED;
+      await transaction.save();
+    }
+    return transaction;
+  }
 
   all = ({ auth }: HttpContextContract) => {
     return transactionQueries().where(
